@@ -33,6 +33,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      - name: Verify build output
+        run: |
+          if [ ! -d "./out" ]; then
+            echo "Build output directory not found!"
+            ls -la
+            exit 1
+          fi
+          echo "Build output directory found. Contents:"
+          ls -la ./out
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
