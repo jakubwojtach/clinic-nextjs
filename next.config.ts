@@ -1,12 +1,14 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-	output: 'export',
-	basePath: process.env.NODE_ENV === 'production' ? '/clinic' : '',
+import type { NextConfig } from 'next'
+
+const nextConfig: NextConfig = {
+	/* config options here */
 	images: {
-		unoptimized: true
-	},
-	// Ensure trailing slashes are handled correctly
-	trailingSlash: true
+		remotePatterns: [
+			{
+				hostname: 'cdn.sanity.io'
+			}
+		]
+	}
 }
 
 export default nextConfig
