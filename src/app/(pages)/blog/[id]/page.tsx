@@ -7,7 +7,16 @@ import Link from 'next/link'
 import { PortableText } from '@portabletext/react'
 import { BlogList } from '@/components/BlogList'
 
-export default async function BlogPostPage({ params }: { params: { id: string } }) {
+// This function tells Next.js which paths to pre-render at build time
+export async function generateStaticParams() {
+	const posts = await client.fetch(`*[_type == "blogPost"]._id`)
+	return posts.map((id: string) => ({
+		id: id
+	}))
+}
+
+export default async function BlogPostPage(props: { params: Promise<{ id: string }> }) {
+	const params = await props.params
 	const blogPost = await client.fetch<BlogPost>(
 		`*[_type == "blogPost" && _id == $id][0]{
 		...,

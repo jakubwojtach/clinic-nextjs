@@ -3,11 +3,11 @@ import { getContainerClass } from '@/components/common/utils'
 import classNames from 'classnames'
 import { Suspense } from 'react'
 
-export default async function BlogPage({
-	searchParams
-}: {
-	searchParams: { [key: string]: string | string[] | undefined }
-}) {
+type Props = {
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+}
+
+export default async function BlogPage({ searchParams }: Props) {
 	const { sorting, tag, searchQuery, perPage } = await searchParams
 
 	return (

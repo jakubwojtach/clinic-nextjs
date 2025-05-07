@@ -3,7 +3,8 @@ import Image from 'next/legacy/image'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 
-export default async function DoctorPage({ params }: { params: { id: string } }) {
+export default async function DoctorPage(props: { params: Promise<{ id: string }> }) {
+	const params = await props.params
 	const doctor = await client.fetch(`*[_type == "doctor" && _id == $id][0]`, { id: params.id })
 	return (
 		<>
