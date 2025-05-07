@@ -58,7 +58,9 @@ export const Nav = ({ links, logo }: NavProps) => {
 								href={link.href}
 								className={classNames(
 									'font-medium relative',
-									activeLink === link.href ?
+									(
+										link.href === '/' ? activeLink === '/' : activeLink.startsWith(link.href)
+									) ?
 										'text-pink hover:opacity-100 lg:after:opacity-100 lg:after:scale-y-100'
 									:	'text-white',
 									'after:content-[" "] after:block after:w-1 after:h-1 after:bg-pink after:absolute after:bottom-[-8px] after:left-[50%] after:right-[50%] after:translate-x-[-50%] after:opacity-0 after:scale-y-0 after:origin-top after:rounded-full ',

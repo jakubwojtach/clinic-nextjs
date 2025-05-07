@@ -1,3 +1,4 @@
+import { Doctors } from '@/components/Doctors'
 import { Header } from '@/components/Header'
 import { client } from '@/sanity/lib/client'
 
@@ -15,6 +16,7 @@ export default async function AboutPage() {
 					textColor='text-dark-gray'
 				/>
 			</div>
+			<Doctors />
 		</>
 	)
 }

@@ -1,3 +1,4 @@
-export default function BlogPostPage({ params }: { params: { id: string } }) {
-	return <div>Blog post {params.id}</div>
+export default async function BlogPostPage({ params }: { params: { id: string } }) {
+	const { id } = await params
+	return <div>Blog post {id}</div>
 }

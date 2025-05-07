@@ -29,7 +29,11 @@ export interface BlogPost extends SanityDocument {
 	author: string
 	publishedAt: string
 	mainImage: Image
-	tags: string[]
+	tags: {
+		_id: string
+		name: string
+	}[]
+	isFeatured?: boolean
 }
 
 export interface Testimonial extends SanityDocument {

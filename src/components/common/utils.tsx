@@ -10,3 +10,33 @@ export const containerStyles = {
 export const getContainerClass = (variant: keyof typeof containerStyles = 'withGap') => {
 	return containerStyles[variant]
 }
+
+export const convertToSortingString = (sorting: string) => {
+	switch (sorting) {
+		case 'newest':
+			return 'publishedAt desc'
+		case 'oldest':
+			return 'publishedAt asc'
+		case 'a-z':
+			return 'title asc'
+		case 'z-a':
+			return 'title desc'
+		default:
+			return 'publishedAt desc'
+	}
+}
+
+export const convertFromSortingString = (sorting: string) => {
+	switch (sorting) {
+		case 'publishedAt desc':
+			return 'newest'
+		case 'publishedAt asc':
+			return 'oldest'
+		case 'title asc':
+			return 'a-z'
+		case 'title desc':
+			return 'z-a'
+		default:
+			return 'newest'
+	}
+}

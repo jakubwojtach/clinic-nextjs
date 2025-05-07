@@ -19,6 +19,11 @@ export const testimonials = defineType({
 			name: 'review',
 			title: 'Opinia',
 			type: 'text'
+		}),
+		defineField({
+			name: 'source',
+			title: 'Źródło',
+			type: 'string'
 		})
 	]
 })
