@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { client } from '@/sanity/lib/client'
 import { BlogPost } from '@/types/sanity'
 import Image from 'next/legacy/image'
@@ -12,11 +13,14 @@ import { Pagination } from './common/Pagination'
 import classNames from 'classnames'
 
 // Server component for data fetching
-export async function getBlogPosts(page: number, perPage: number, tag?: string, sort?: string, searchQuery?: string) {
-	// Debug query to check if we have any blog posts
-	const allPosts = await client.fetch<BlogPost[]>(`*[_type == "blogPost"]`)
-	console.log('All blog posts:', allPosts)
-
+export async function getBlogPosts(
+	page: number,
+	perPage: number,
+	tag?: string,
+	sort?: string,
+	searchQuery?: string,
+	skipFeaturedInList = false
+) {
 	const baseQuery = `*[_type == "blogPost" ${tag ? `&& "${tag}" in tags[]->name` : ''} ${
 		searchQuery ? `&& (title match "${searchQuery}*" || content[0].children[0].text match "${searchQuery}*")` : ''
 	}`
@@ -25,10 +29,8 @@ export async function getBlogPosts(page: number, perPage: number, tag?: string, 
 	const featuredQuery = `${baseQuery} && isFeatured == true]`
 
 	// Get regular posts (excluding featured ones)
-	const regularQuery = `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
-
-	console.log('Featured Query:', featuredQuery)
-	console.log('Regular Query:', regularQuery)
+	const regularQuery =
+		skipFeaturedInList ? `${baseQuery}]` : `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
 
 	const [featuredPost, regularPosts, total] = await Promise.all([
 		client.fetch<BlogPost | null>(
@@ -51,10 +53,6 @@ export async function getBlogPosts(page: number, perPage: number, tag?: string, 
 		),
 		client.fetch<number>(`count(${regularQuery})`)
 	])
-
-	console.log('Featured Post:', featuredPost)
-	console.log('Regular Posts:', regularPosts)
-	console.log('Total:', total)
 
 	return {
 		featuredPost,
@@ -97,7 +95,11 @@ export const BlogList = async ({
 	withPagination = false,
 	withFeatured = false
 }: BlogListProps) => {
-	const { posts: blogPosts, totalPages, featuredPost } = await getBlogPosts(page, perPage, tag, sort, searchQuery)
+	const {
+		posts: blogPosts,
+		totalPages,
+		featuredPost
+	} = await getBlogPosts(page, perPage, tag, sort, searchQuery, !withFeatured)
 	const tags = await getTags()
 
 	return (

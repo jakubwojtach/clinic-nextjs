@@ -10,7 +10,6 @@ export const blogPost = defineType({
 			title: 'Tytuł posta',
 			type: 'string'
 		}),
-
 		defineField({
 			name: 'content',
 			title: 'Treść posta',

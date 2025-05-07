@@ -5,7 +5,6 @@ import { urlFor } from '@/sanity/lib/image'
 
 export default async function DoctorPage({ params }: { params: { id: string } }) {
 	const doctor = await client.fetch(`*[_type == "doctor" && _id == $id][0]`, { id: params.id })
-	console.log(doctor)
 	return (
 		<>
 			<div className='bg-white'>
