@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { DM_Sans } from 'next/font/google'
 import './globals.css'
 import { PropsWithChildren } from 'react'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 
 const dmSans = DM_Sans({
 	variable: '--font-dm-sans',
@@ -18,6 +19,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
 		<html lang='pl' className='w-screen'>
 			<body className={`${dmSans.variable} antialiased bg-green w-screen overflow-x-hidden flex flex-col min-h-screen`}>
 				{children}
+				<SpeedInsights />
 			</body>
 		</html>
 	)
