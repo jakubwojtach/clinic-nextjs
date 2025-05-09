@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { client } from '@/sanity/lib/client'
 import { BlogPost } from '@/types/sanity'
 import Image from 'next/legacy/image'
@@ -124,11 +123,12 @@ export const BlogList = async ({
 			{withFeatured && featuredPost && (
 				<div className='w-full'>
 					<div className='flex bg-pink rounded-md border-[4px] border-pink overflow-hidden hover:shadow-2xl transition-all duration-300'>
-						<div className='grid grid-cols-1 sm:grid-cols-2 h-auto'>
-							<Link href={`/blog/${featuredPost._id}`} className='cursor-pointer'>
-								<img
+						<div className='grid grid-cols-1 sm:grid-cols-2 h-auto w-full'>
+							<Link href={`/blog/${featuredPost._id}`} className='cursor-pointer relative w-full min-h-[300px]'>
+								<Image
 									src={urlFor(featuredPost.mainImage).url()}
 									alt={featuredPost.title}
+									layout='fill'
 									className='w-full h-full object-cover rounded-md'
 								/>
 							</Link>
