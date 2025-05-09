@@ -4,7 +4,7 @@ import { urlFor } from '@/sanity/lib/image'
 import { BlogPost } from '@/types/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
-import { PortableText } from '@portabletext/react'
+import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { BlogList } from '@/components/BlogList'
 
 // This function tells Next.js which paths to pre-render at build time
@@ -13,6 +13,40 @@ export async function generateStaticParams() {
 	return posts.map((id: string) => ({
 		id: id
 	}))
+}
+
+const components: PortableTextComponents = {
+	block: {
+		h1: ({ children }) => <h1 className='text-4xl font-bold text-dark-gray mb-6'>{children}</h1>,
+		h2: ({ children }) => <h2 className='text-3xl font-bold text-dark-gray mb-4'>{children}</h2>,
+		h3: ({ children }) => <h3 className='text-2xl font-bold text-dark-gray mb-3'>{children}</h3>,
+		h4: ({ children }) => <h4 className='text-xl font-bold text-dark-gray mb-2'>{children}</h4>,
+		normal: ({ children }) => <p className='text-base text-dark-gray mb-4 leading-relaxed'>{children}</p>,
+		blockquote: ({ children }) => (
+			<blockquote className='border-l-4 border-pink pl-4 italic my-6'>{children}</blockquote>
+		)
+	},
+	list: {
+		bullet: ({ children }) => <ul className='list-disc list-inside mb-4 space-y-2'>{children}</ul>,
+		number: ({ children }) => <ol className='list-decimal list-inside mb-4 space-y-2'>{children}</ol>
+	},
+	marks: {
+		link: ({ children, value }) => {
+			const target = value?.href?.startsWith('http') ? '_blank' : undefined
+			return (
+				<Link
+					href={value?.href || '#'}
+					target={target}
+					rel={target === '_blank' ? 'noopener noreferrer' : undefined}
+					className='text-pink hover:text-dark-gray underline transition-colors'
+				>
+					{children}
+				</Link>
+			)
+		},
+		strong: ({ children }) => <strong className='font-bold'>{children}</strong>,
+		em: ({ children }) => <em className='italic'>{children}</em>
+	}
 }
 
 export default async function BlogPostPage(props: { params: Promise<{ id: string }> }) {
@@ -66,7 +100,7 @@ export default async function BlogPostPage(props: { params: Promise<{ id: string
 							className='w-full max-h-[250px] sm:max-h-[400px] rounded-lg object-cover'
 						/>
 						<div className='prose prose-lg w-full'>
-							<PortableText value={blogPost.content} />
+							<PortableText value={blogPost.content} components={components} />
 						</div>
 					</div>
 				</div>
