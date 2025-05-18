@@ -1,22 +1,24 @@
 import { client } from '@/sanity/lib/client'
-import { Doctor } from '@/types/sanity'
+import { Doctor, SectionTitles } from '@/types/sanity'
 import { Title } from './common/Title'
 import Image from 'next/legacy/image'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
 import { Button } from './common/Button'
-import { getContainerClass } from './common/utils'
+import { getContainerClass } from '../utils/utils'
 
 export const Doctors = async ({ limit = 4, withButton = true }: { limit?: number; withButton?: boolean }) => {
 	const doctors = await client.fetch<Doctor[]>(`*[_type == "doctor"][0...${limit}]`)
-
+	const sectionTitle = await client.fetch<SectionTitles>(
+		`*[_type == "sectionTitles" && slug.current == "poznaj-naszych-specjalistow"][0]`
+	)
 	return (
 		<div className={getContainerClass('centered')}>
 			<Title
 				className='text-light-pink'
-				sectionName='Nasi lekarze'
-				title='Poznaj naszych specjalistów'
-				longText='Nasza kadra to doświadczeni specjaliści, którzy są zdeterminowani, życzliwi i wnikliwi. Nasi lekarze są wysoko wykwalifikowani i posiadają wieloletnie doświadczenie w swoich dziedzinach.'
+				sectionName={sectionTitle?.subtitle}
+				title={sectionTitle?.title}
+				longText={sectionTitle?.description}
 			/>
 			<div className='grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2 gap-8 w-full mx-auto'>
 				{doctors.map((doctor) => (

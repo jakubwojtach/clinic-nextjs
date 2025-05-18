@@ -1,20 +1,22 @@
 import { client } from '@/sanity/lib/client'
 import { Title } from './common/Title'
-import { Testimonial } from '@/types/sanity'
+import { SectionTitles, Testimonial } from '@/types/sanity'
 import { IconStarFilled } from '@tabler/icons-react'
-import { getContainerClass } from './common/utils'
+import { getContainerClass } from '../utils/utils'
 
-export const Testimonials = async () => {
-	const testimonials = await client.fetch<Testimonial[]>(`*[_type == "testimonials"][0...3]`)
+interface TestimonialsProps {
+	limit?: number
+}
 
+export const Testimonials = async ({ limit }: TestimonialsProps) => {
+	const testimonials = await client.fetch<Testimonial[]>(`*[_type == "testimonials"]${limit ? `[0...${limit}]` : ''}`)
+	const sectionTitle = await client.fetch<SectionTitles>(
+		`*[_type == "sectionTitles" && slug.current == "co-mowia-nasi-pacjenci"][0]`
+	)
 	return (
-		<div className='w-full py-8 sm:py-16 bg-light-pink px-6 xl:px-0'>
+		<div className='w-full bg-light-pink '>
 			<div className={getContainerClass('centered')}>
-				<Title
-					sectionName='Opinie pacjentów'
-					title='Co mówią nasi pacjenci'
-					longText='Przeczytaj opinie naszych pacjentów, którzy skorzystali z naszych usług. Zobacz, jak nasze usługi pomogły im w poprawie swojego zdrowia.'
-				/>
+				<Title sectionName={sectionTitle?.subtitle} title={sectionTitle?.title} longText={sectionTitle?.description} />
 				<div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full'>
 					{testimonials.map((testimonial) => (
 						<div

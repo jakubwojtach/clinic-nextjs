@@ -1,4 +1,4 @@
-import { getContainerClass } from '@/components/common/utils'
+import { getContainerClass } from '@/utils/utils'
 import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
 import { BlogPost } from '@/types/sanity'

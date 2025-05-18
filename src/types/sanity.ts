@@ -1,5 +1,8 @@
+import { ICON_VALUES } from '@/constants/icon-list'
 import { SanityDocument } from 'next-sanity'
 
+export type AllowedPages = 'about' | 'doctors' | 'contact' | 'blog' | 'homepage'
+export const ALLOWED_PAGES: AllowedPages[] = ['about', 'doctors', 'contact', 'blog', 'homepage']
 export type Block = {
 	_type: 'block'
 	children: {
@@ -61,4 +64,60 @@ export interface AccordionHomepage extends SanityDocument {
 export interface FAQ extends SanityDocument {
 	question: string
 	answer: string
+}
+
+export interface AboutTab extends SanityDocument {
+	title: string
+	description: string
+	image: Image
+	icon: (typeof ICON_VALUES)[number]
+}
+
+export interface GenericHeader extends SanityDocument {
+	title: string
+	description: string
+	image: Image
+	imageAlt: string
+}
+
+export interface HomepageHeader extends GenericHeader {
+	cta1Title: string
+	cta1Link: AllowedPages
+	cta2Title: string
+	cta2Link: AllowedPages
+}
+
+export interface SeparatorWithButton extends SanityDocument {
+	title: string
+	description: string
+	buttonTitle: string
+	buttonLink: AllowedPages
+	allowedPages: AllowedPages[]
+	enable: boolean
+}
+
+export interface SectionTitles extends SanityDocument {
+	subtitle: string
+	title: string
+	description: string
+	slug: {
+		_type: 'slug'
+		current: string
+	}
+}
+
+export interface Footer extends SanityDocument {
+	leftTitle: string
+	leftDescription: string
+	rightTitle: string
+	rightDescription: string
+	address: string
+	phone: string
+	email: string
+	socialMedia: SanityDocument[]
+}
+
+export interface Achievements extends SanityDocument {
+	title: string
+	icon: (typeof ICON_VALUES)[number]
 }

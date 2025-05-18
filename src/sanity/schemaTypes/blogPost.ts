@@ -1,9 +1,11 @@
+import { IconFileText } from '@tabler/icons-react'
 import { defineType, defineField } from 'sanity'
 
 export const blogPost = defineType({
 	name: 'blogPost',
 	title: 'Posty baza wiedzy',
 	type: 'document',
+	icon: IconFileText,
 	fields: [
 		defineField({
 			name: 'title',

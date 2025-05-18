@@ -1,14 +1,16 @@
 import { Accordion } from '@/components/common/Accordion'
-import { getContainerClass } from '@/components/common/utils'
-import { ContactForm } from '@/components/ContactForm'
+import { getContainerClass } from '@/utils/utils'
+import { ContactForm } from '@/components/ContactForm/ContactForm'
 import { Header } from '@/components/Header'
 import { client } from '@/sanity/lib/client'
-import { FAQ } from '@/types/sanity'
+import { FAQ, Footer, GenericHeader } from '@/types/sanity'
 import classNames from 'classnames'
+import { urlFor } from '@/sanity/lib/image'
 
 export default async function ContactPage() {
-	const images = await client.fetch(`*[_type == "images"][name == "contact-top"]`)
 	const faq = await client.fetch<FAQ[]>(`*[_type == "faq"]`)
+	const contactHeader = await client.fetch<GenericHeader>(`*[_type == "contactHeader"][0]`)
+	const footer = await client.fetch<Footer>(`*[_type == "footer"][0]`)
 
 	const preparedFAQItems = faq.map((item) => ({
 		title: item.question,
@@ -20,11 +22,11 @@ export default async function ContactPage() {
 		<>
 			<div className='bg-light-pink w-full'>
 				<Header
-					title='Kontakt'
-					description='laborum voluptate in irure nulla incididunt quis minim aute ipsum deserunt et mollit quis elit pariatur laborum ea officia et qui esse quis mollit labore non proident id et do culpa aliqua ut dolore dolore ullamco nulla nisi eu in cillum Lorem ipsum incididunt ut ipsum eiusmod incididunt aliquip id'
+					title={contactHeader.title}
+					description={contactHeader.description}
 					textColor='text-dark-gray'
-					imageUrl={images[0].image}
-					imageAlt={images[0].name}
+					imageUrl={urlFor(contactHeader.image).url()}
+					imageAlt={contactHeader.imageAlt}
 				/>
 			</div>
 			<div className={classNames(getContainerClass('withPadding'), 'text-light-pink gap-10 flex flex-col w-full')}>
@@ -33,19 +35,14 @@ export default async function ContactPage() {
 					<p className='font-semibold'>Ginekologia by Dr. Grochecka</p>
 				</div>
 				<div className='flex flex-col gap-1'>
-					<p>ul. Jana Pawła II 12/34</p>
-					<p>00-000 Warszawa</p>
 					<p>
-						Telefon:{' '}
-						<a className='underline hover:text-pink transition-all duration-300' href='tel:+48123456789'>
-							+48 123 456 789
-						</a>
+						<strong>Adres:</strong> {footer.address}
 					</p>
 					<p>
-						Email:{' '}
-						<a className='underline hover:text-pink transition-all duration-300' href='mailto:kontakt@ginekologia.pl'>
-							kontakt@ginekologia.pl
-						</a>
+						<strong>Telefon:</strong> <a href={`tel:${footer.phone}`}>{footer.phone}</a>
+					</p>
+					<p>
+						<strong>Email:</strong> <a href={`mailto:${footer.email}`}>{footer.email}</a>
 					</p>
 				</div>
 				<div className='w-full flex items-center justify-center h-[200px] sm:h-[400px] bg-dark-gray/10 rounded-2xl group cursor-pointer shadow-2xl'>

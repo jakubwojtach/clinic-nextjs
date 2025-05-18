@@ -1,9 +1,11 @@
+import { IconPhoto } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 export const image = defineType({
 	name: 'images',
 	title: 'Obrazki',
 	type: 'document',
+	icon: IconPhoto,
 	fields: [
 		defineField({
 			name: 'name',

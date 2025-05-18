@@ -1,9 +1,8 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
-import { Button } from './common/Button'
-import { client } from '@/sanity/lib/client'
-import { useEffect, useMemo, useState } from 'react'
+import { Button } from '../common/Button'
+import { useCallback, useMemo } from 'react'
 import { Doctor } from '@/types/sanity'
 
 interface FormData {
@@ -13,14 +12,19 @@ interface FormData {
 	subject: string
 }
 
-export const ContactForm = () => {
+interface ContactFormClientProps {
+	doctors: Doctor[]
+	mailTo: string
+}
+
+export const ContactFormClient = ({ doctors, mailTo }: ContactFormClientProps) => {
 	const {
 		register,
 		handleSubmit,
+		reset,
 		formState: { errors }
 	} = useForm<FormData>()
 
-	const [doctors, setDoctors] = useState<Doctor[]>([])
 	const DOCTORS_OPTIONS = useMemo(() => {
 		return doctors.map((doctor) => ({
 			value: doctor._id,
@@ -28,22 +32,20 @@ export const ContactForm = () => {
 		}))
 	}, [doctors])
 
-	const onSubmit = (data: FormData) => {
-		console.log(data)
-		// Here you would typically send the data to your API
-	}
+	const onSubmit = useCallback(
+		(data: FormData) => {
+			// we need to prepare a message that will be sent via default email client
+			const message = `Imię i nazwisko: ${data.name}
+Adres e-mail: ${data.email}
+Wybierz lekarza: ${data.doctor}
+Temat wiadomości: ${data.subject}`
 
-	const getDoctors = async () => {
-		await client.fetch(`*[_type == "doctor"]`).then((data) => {
-			if (data) {
-				setDoctors(data)
-			}
-		})
-	}
-
-	useEffect(() => {
-		getDoctors()
-	}, [])
+			window.location.href = `mailto:${mailTo}?subject=Wiadomość z formularza kontaktowego&body=${encodeURIComponent(message)}`
+			// clear form
+			reset()
+		},
+		[mailTo, reset]
+	)
 
 	return (
 		<form onSubmit={handleSubmit(onSubmit)} className='w-full'>

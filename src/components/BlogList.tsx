@@ -1,15 +1,14 @@
 import { client } from '@/sanity/lib/client'
-import { BlogPost } from '@/types/sanity'
+import { BlogPost, SectionTitles } from '@/types/sanity'
 import Image from 'next/legacy/image'
 import { urlFor } from '@/sanity/lib/image'
 import { Title } from './common/Title'
 import { Button } from './common/Button'
 import Link from 'next/link'
-import { getContainerClass } from './common/utils'
+import { getContainerClass } from '../utils/utils'
 
 import { Filters } from './Filters'
 import { Pagination } from './common/Pagination'
-import classNames from 'classnames'
 
 // Server component for data fetching
 export async function getBlogPosts(
@@ -100,19 +99,17 @@ export const BlogList = async ({
 		featuredPost
 	} = await getBlogPosts(page, perPage, tag, sort, searchQuery, !withFeatured)
 	const tags = await getTags()
-
+	const sectionTitle = await client.fetch<SectionTitles>(
+		`*[_type == "sectionTitles" && slug.current == "nasze-artykuly"][0]`
+	)
 	return (
-		<div className={classNames(getContainerClass('centered'), '!px-0')}>
+		<div className={getContainerClass('centered')}>
 			{withTitle && (
 				<Title
-					sectionName='Baza wiedzy'
-					title={tag ? `Artykuły z tagiem: ${tag}.` : 'Najnowsze artykuły'}
+					sectionName={sectionTitle?.subtitle}
+					title={sectionTitle?.title}
 					className='text-light-pink'
-					longText={
-						tag ?
-							`Artykuły z tagiem: ${tag}.`
-						:	'Przeczytaj nasze najnowsze artykuły, aby poznać nasze zdrowotne porady i informacje.'
-					}
+					longText={sectionTitle?.description}
 				/>
 			)}
 			{withFilters && (

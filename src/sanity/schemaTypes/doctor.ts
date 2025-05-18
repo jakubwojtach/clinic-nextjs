@@ -1,9 +1,11 @@
+import { IconReportMedical } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 export const doctor = defineType({
 	name: 'doctor',
 	title: 'Lekarze',
 	type: 'document',
+	icon: IconReportMedical,
 	fields: [
 		defineField({
 			name: 'name',

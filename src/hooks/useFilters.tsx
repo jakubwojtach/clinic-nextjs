@@ -1,6 +1,6 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { convertToSortingString, convertFromSortingString } from '@/components/common/utils'
+import { convertToSortingString, convertFromSortingString } from '@/utils/utils'
 
 export const useFilters = () => {
 	const [selectedTag, setSelectedTag] = useState<string>('')

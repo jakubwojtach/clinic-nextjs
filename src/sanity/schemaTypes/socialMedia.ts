@@ -1,9 +1,11 @@
+import { IconSocial } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 export const socialMedia = defineType({
 	name: 'socialMedia',
 	title: 'Social Media',
 	type: 'document',
+	icon: IconSocial,
 	fields: [
 		defineField({
 			name: 'name',

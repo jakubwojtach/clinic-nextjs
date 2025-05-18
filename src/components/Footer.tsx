@@ -6,21 +6,17 @@ import {
 	IconBrandTwitter,
 	IconBrandYoutube
 } from '@tabler/icons-react'
-import { SanityDocument } from 'next-sanity'
 import Image from 'next/legacy/image'
 import { Button } from './common/Button'
 import Link from 'next/link'
+import { Footer as FooterType } from '@/types/sanity'
+
 export const Footer = async () => {
-	const SOCIAL_LINKS_QUERY = `*[
-  _type == "socialMedia"
-  && defined(url)
-]|order(publishedAt desc)[0...12]{_id, name, url, type}`
-
-	const options = { next: { revalidate: 30 } }
-
-	const socialLinks = await client.fetch<SanityDocument[]>(SOCIAL_LINKS_QUERY, {}, options)
-
-	const MAPPED_ICONS = socialLinks.map((social) => {
+	const footer = await client.fetch<FooterType>(`*[_type == "footer"][0] {
+		...,
+		socialMedia[]->{_id, name, url, type}
+	}`)
+	const MAPPED_ICONS = footer.socialMedia.map((social) => {
 		switch (social.type) {
 			case 'facebook':
 				return <IconBrandFacebook />
@@ -42,13 +38,10 @@ export const Footer = async () => {
 			<div className='bg-light-pink py-8 xl:py-16 px-6 xl:px-0'>
 				<div className='container grid grid-cols-1 xl:grid-cols-2 gap-12'>
 					<div className='flex flex-col gap-6'>
-						<h2 className='text-title font-bold'>Social Media</h2>
-						<p>
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias dolor repudiandae dolore maxime maiores
-							porro exercitationem, non sunt culpa vel.
-						</p>
+						<h2 className='text-title font-bold'>{footer.leftTitle}</h2>
+						<p>{footer.leftDescription}</p>
 						<div className='flex flex-row gap-8'>
-							{socialLinks.map((link, index) => (
+							{footer.socialMedia.map((link, index) => (
 								<a
 									key={link._id}
 									href={link.url}
@@ -63,20 +56,17 @@ export const Footer = async () => {
 						</div>
 					</div>
 					<div className='flex flex-col gap-6'>
-						<h2 className='text-title font-bold'>Kontakt</h2>
-						<p>
-							Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias dolor repudiandae dolore maxime maiores
-							porro exercitationem, non sunt culpa vel.
-						</p>
+						<h2 className='text-title font-bold'>{footer.rightTitle}</h2>
+						<p>{footer.rightDescription}</p>
 						<div className='flex flex-col gap-2'>
 							<p>
-								<strong>Email:</strong> info@example.com
+								<strong>Email:</strong> <a href={`mailto:${footer.email}`}>{footer.email}</a>
 							</p>
 							<p>
-								<strong>Phone:</strong> 123-456-7890
+								<strong>Telefon:</strong> <a href={`tel:${footer.phone}`}>{footer.phone}</a>
 							</p>
 							<p>
-								<strong>Address:</strong> 123 Main St, Anytown, USA
+								<strong>Adres:</strong> {footer.address}
 							</p>
 						</div>
 						<Link href='/contact'>

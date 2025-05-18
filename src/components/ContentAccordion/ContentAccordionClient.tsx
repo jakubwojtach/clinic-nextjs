@@ -1,36 +1,31 @@
 'use client'
+
 import classNames from 'classnames'
-import { Title } from './common/Title'
-import { useEffect, useState } from 'react'
-import { client } from '@/sanity/lib/client'
+import { Title } from '../common/Title'
+import { useState } from 'react'
 import Image from 'next/legacy/image'
 import { urlFor } from '@/sanity/lib/image'
-import { AccordionHomepage } from '@/types/sanity'
-import { getContainerClass } from './common/utils'
+import { AccordionHomepage, SectionTitles } from '@/types/sanity'
+import { getContainerClass } from '../../utils/utils'
 
-export const ContentAccordion = () => {
+interface ContentAccordionClientProps {
+	accordions: AccordionHomepage[]
+	sectionTitle: SectionTitles
+}
+
+export const ContentAccordionClient = ({ accordions, sectionTitle }: ContentAccordionClientProps) => {
 	const [activeTab, setActiveTab] = useState(0)
-	const [accordionContent, setAccordionContent] = useState<AccordionHomepage[]>([])
 
-	useEffect(() => {
-		const fetchAccordions = async () => {
-			const accordions = await client.fetch(`*[_type == "accordionHomepage"][0...3]`)
-			setAccordionContent(accordions)
-		}
-		fetchAccordions()
-	}, [])
-
-	console.log('accordionContent', accordionContent)
 	return (
 		<div className={getContainerClass('centered')}>
 			<Title
 				className='text-light-pink'
-				sectionName='Accordion'
-				title='Accordion'
-				longText='Laborum elit culpa et nisi irure nulla ipsum cupidatat id eu do nostrud nulla quis. Occaecat elit sint sit. Laboris consequat anim proident. Excepteur commodo et aliquip eiusmod non ad consequat aliqua sit veniam. Est exercitation commodo ex cillum. Excepteur proident elit nostrud proident.'
+				sectionName={sectionTitle?.subtitle}
+				title={sectionTitle?.title}
+				longText={sectionTitle?.description}
 			/>
 			<div className='w-full flex flex-col gap-8 container'>
-				{accordionContent.map((accordion, index) => (
+				{accordions.map((accordion, index) => (
 					<div
 						key={accordion._id}
 						className={classNames(

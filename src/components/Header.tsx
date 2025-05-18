@@ -1,7 +1,7 @@
 import { urlFor } from '@/sanity/lib/image'
 import Image from 'next/image'
 import { PropsWithChildren } from 'react'
-import { getContainerClass } from './common/utils'
+import { getContainerClass } from '../utils/utils'
 
 interface HeaderProps extends PropsWithChildren {
 	title: string

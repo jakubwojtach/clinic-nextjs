@@ -3,54 +3,64 @@ import { BlogList } from '@/components/BlogList'
 import { Testimonials } from '@/components/Testimonials'
 import { Header } from '@/components/Header'
 import { Doctors } from '@/components/Doctors'
-import { ContentAccordion } from '@/components/ContentAccordion'
+import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion'
 import { Button } from '@/components/common/Button'
-import { Fundaments } from '@/components/Fundaments'
+import { Achievements } from '@/components/Achievements'
 import Link from 'next/link'
 import { client } from '@/sanity/lib/client'
+import { HomepageHeader, SectionTitles, SeparatorWithButton } from '@/types/sanity'
+import { urlFor } from '@/sanity/lib/image'
 
 export default async function IndexPage() {
-	const images = await client.fetch(`*[_type == "images"][name == "homepage-top"]`)
+	const homepageHeader = await client.fetch<HomepageHeader>(`*[_type == "homepageHeader"][0]`)
+	const separatorWithButton = await client.fetch<SeparatorWithButton | null>(`*[_type == "separatorWithButton"][0]`)
+	const sectionTitle = await client.fetch<SectionTitles | null>(
+		`*[_type == "sectionTitles" && slug.current == "nasze-osiagniecia"][0]`
+	)
 
 	return (
 		<>
 			<Header
-				title='Ginekologia by Dr. Grochecka'
-				description='Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.'
-				imageUrl={images[0].image}
-				imageAlt={images[0].name}
+				title={homepageHeader.title}
+				description={homepageHeader.description}
+				imageUrl={urlFor(homepageHeader.image).url()}
+				imageAlt={homepageHeader.imageAlt}
 			>
 				<div className='flex flex-col sm:flex-row gap-6 items-start mt-8 w-full'>
-					<Link href='/about'>
+					<Link href={homepageHeader.cta1Link}>
 						<Button variant='lightPink' className='border-[1px] border-black px-8 w-full sm:w-auto'>
-							O nas
+							{homepageHeader.cta1Title}
 						</Button>
 					</Link>
-					<Link href='/doctors'>
+					<Link href={homepageHeader.cta2Link}>
 						<Button variant='lightPinkOutline' className='border-[1px] border-black px-8 w-full sm:w-auto'>
-							Poznaj naszych lekarzy
+							{homepageHeader.cta2Title}
 						</Button>
 					</Link>
 				</div>
 			</Header>
 			<div className='bg-light-pink w-full py-8 xl:py-16 px-6 xl:px-0'>
 				<Title
-					sectionName='Cały czas się rozwijamy'
-					title='Nasze osiągnięcia'
-					longText='Jesteśmy zespołem specjalistów, którzy są zdeterminowani, życzliwi i wnikliwi. Nasi lekarze są wysoko wykwalifikowani i posiadają wieloletnie doświadczenie w swoich dziedzinach.'
+					sectionName={sectionTitle?.subtitle ?? ''}
+					title={sectionTitle?.title ?? ''}
+					longText={sectionTitle?.description ?? ''}
 				/>
 			</div>
-			<Fundaments />
-			<ContentAccordion />
-			<div className='bg-dark-gray w-full py-8 xl:py-16 px-6 xl:px-0'>
-				<Title className='text-light-pink' title='Cokolwiek innego'>
-					<Button variant='white' className='sm:w-fit md:px-32 mx-auto w-full'>
-						Czytaj więcej
-					</Button>
-				</Title>
-			</div>
+			<Achievements />
+			<ContentAccordion limit={3} />
+			{separatorWithButton?.enable && separatorWithButton?.allowedPages.includes('homepage') && (
+				<div className='bg-dark-gray w-full py-8 xl:py-16 px-6 xl:px-0'>
+					<Title className='text-light-pink sm:text-left text-center' title={separatorWithButton.title}>
+						<Link href={separatorWithButton.buttonLink} className='sm:ml-auto'>
+							<Button variant='white' className='sm:w-fit md:px-32 mx-auto w-full'>
+								{separatorWithButton.buttonTitle}
+							</Button>
+						</Link>
+					</Title>
+				</div>
+			)}
 			<Doctors />
-			<Testimonials />
+			<Testimonials limit={3} />
 			<BlogList />
 		</>
 	)

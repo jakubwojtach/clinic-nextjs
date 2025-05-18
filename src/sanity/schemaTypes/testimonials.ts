@@ -1,9 +1,11 @@
+import { IconQuote } from '@tabler/icons-react'
 import { defineField, defineType } from 'sanity'
 
 export const testimonials = defineType({
 	name: 'testimonials',
 	title: 'Opinie klientów',
 	type: 'document',
+	icon: IconQuote,
 	fields: [
 		defineField({
 			name: 'name',
