@@ -6,59 +6,63 @@ import { Title } from './common/Title'
 import { Button } from './common/Button'
 import Link from 'next/link'
 import { getContainerClass } from '../utils/utils'
-
 import { Filters } from './Filters'
 import { Pagination } from './common/Pagination'
+import { unstable_cache } from 'next/cache'
 
-// Server component for data fetching
-export async function getBlogPosts(
-	page: number,
-	perPage: number,
-	tag?: string,
-	sort?: string,
-	searchQuery?: string,
-	skipFeaturedInList = false
-) {
-	const baseQuery = `*[_type == "blogPost" ${tag ? `&& "${tag}" in tags[]->name` : ''} ${
-		searchQuery ? `&& (title match "${searchQuery}*" || content[0].children[0].text match "${searchQuery}*")` : ''
-	}`
+// Server component for data fetching with caching
+const getBlogPosts = unstable_cache(
+	async (
+		page: number,
+		perPage: number,
+		tag?: string,
+		sort?: string,
+		searchQuery?: string,
+		skipFeaturedInList = false
+	) => {
+		const baseQuery = `*[_type == "blogPost" ${tag ? `&& "${tag}" in tags[]->name` : ''} ${
+			searchQuery ? `&& (title match "${searchQuery}*" || content[0].children[0].text match "${searchQuery}*")` : ''
+		}`
 
-	// Get featured posts first
-	const featuredQuery = `${baseQuery} && isFeatured == true]`
+		// Get featured posts first
+		const featuredQuery = `${baseQuery} && isFeatured == true]`
 
-	// Get regular posts (excluding featured ones)
-	const regularQuery =
-		skipFeaturedInList ? `${baseQuery}]` : `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
+		// Get regular posts (excluding featured ones)
+		const regularQuery =
+			skipFeaturedInList ? `${baseQuery}]` : `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
 
-	const [featuredPost, regularPosts, total] = await Promise.all([
-		client.fetch<BlogPost | null>(
-			`${featuredQuery} | order(${sort || 'publishedAt desc'}) [0] {
-				...,
-				tags[]->{
-					_id,
-					name
-				}
-			}`
-		),
-		client.fetch<BlogPost[]>(
-			`${regularQuery} | order(${sort || 'publishedAt desc'}) [${(page - 1) * perPage}...${page * perPage}] {
-				...,
-				tags[]->{
-					_id,
-					name
-				}
-			}`
-		),
-		client.fetch<number>(`count(${regularQuery})`)
-	])
+		const [featuredPost, regularPosts, total] = await Promise.all([
+			client.fetch<BlogPost | null>(
+				`${featuredQuery} | order(${sort || 'publishedAt desc'}) [0] {
+					...,
+					tags[]->{
+						_id,
+						name
+					}
+				}`
+			),
+			client.fetch<BlogPost[]>(
+				`${regularQuery} | order(${sort || 'publishedAt desc'}) [${(page - 1) * perPage}...${page * perPage}] {
+					...,
+					tags[]->{
+						_id,
+						name
+					}
+				}`
+			),
+			client.fetch<number>(`count(${regularQuery})`)
+		])
 
-	return {
-		featuredPost,
-		posts: regularPosts,
-		total,
-		totalPages: Math.ceil(total / perPage)
-	}
-}
+		return {
+			featuredPost,
+			posts: regularPosts,
+			total,
+			totalPages: Math.ceil(total / perPage)
+		}
+	},
+	['blog-posts'],
+	{ revalidate: 3600 }
+)
 
 export async function getTags() {
 	return await client.fetch<BlogPost['tags']>(`*[_type == "tags"] {
@@ -102,6 +106,7 @@ export const BlogList = async ({
 	const sectionTitle = await client.fetch<SectionTitles>(
 		`*[_type == "sectionTitles" && slug.current == "nasze-artykuly"][0]`
 	)
+
 	return (
 		<div className={getContainerClass('centered')}>
 			{withTitle && (

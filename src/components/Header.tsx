@@ -35,7 +35,10 @@ export const Header = async ({
 					<Image
 						src={urlFor(imageUrl).url()}
 						alt={imageAlt || ''}
-						layout='fill'
+						fill
+						sizes='(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
+						priority
+						quality={90}
 						className='w-full h-full object-cover'
 					/>
 				</div>
