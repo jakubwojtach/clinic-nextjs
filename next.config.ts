@@ -16,8 +16,6 @@ const nextConfig: NextConfig = {
 	},
 	// Enable React strict mode for better development experience
 	reactStrictMode: true,
-	// Enable SWC minification
-	swcMinify: true,
 	// Enable compression
 	compress: true,
 	// Enable production source maps

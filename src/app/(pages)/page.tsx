@@ -1,7 +1,6 @@
 import { Title } from '@/components/common/Title'
 import { BlogList } from '@/components/BlogList'
 import { Testimonials } from '@/components/Testimonials'
-import { Header } from '@/components/Header'
 import { Doctors } from '@/components/Doctors'
 import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion'
 import { Button } from '@/components/common/Button'
