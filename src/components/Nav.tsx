@@ -8,15 +8,15 @@ import classNames from 'classnames'
 import { IconMenuDeep, IconX } from '@tabler/icons-react'
 import { useState } from 'react'
 
-interface NavProps {
-	links: {
-		label: string
-		href: string
-	}[]
-	logo: string
-}
+const links = [
+	{ label: 'Strona główna', href: '/' },
+	{ label: 'O nas', href: '/about' },
+	{ label: 'Nasi lekarze', href: '/doctors' },
+	{ label: 'Kontakt', href: '/contact' },
+	{ label: 'Baza wiedzy', href: '/blog' }
+]
 
-export const Nav = ({ links, logo }: NavProps) => {
+export const Nav = () => {
 	const activeLink = usePathname()
 	const [isOpen, setIsOpen] = useState(false)
 
@@ -24,7 +24,7 @@ export const Nav = ({ links, logo }: NavProps) => {
 		<nav className='flex flex-row gap-4 bg-dark-gray/90 sticky top-0 z-50 py-5 left-0 right-0 backdrop-blur-sm px-6 xl:px-0'>
 			<div className='container flex justify-between items-center'>
 				<Link href='/' className='h-[50px] sm:h-[60px] relative w-[250px]'>
-					<Image src={logo} alt='logo' layout='fill' className='object-contain' />
+					<Image src='/logo2.svg' alt='logo' layout='fill' className='object-contain' />
 				</Link>
 				<button
 					className='flex items-center justify-center lg:hidden text-white transition-all duration-300 relative w-10 h-10'

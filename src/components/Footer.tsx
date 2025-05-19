@@ -79,9 +79,10 @@ export const Footer = async () => {
 			</div>
 			<div className='bg-dark-gray py-8 px-6 xl:px-0'>
 				<div className='container flex flex-col gap-4 items-center text-white'>
-					<Image src='/logo.svg' alt='logo' width={160} height={30} />
+					<Image src='/logo2.svg' alt='logo' width={160} height={30} />
 					<p className='text-center '>
-						&copy; {new Date().getFullYear()} {companyDetails.name}. Wszelkie prawa zastrzeżone.
+						&copy; {new Date().getFullYear()} {companyDetails.name}. <br />
+						Wszelkie prawa zastrzeżone.
 					</p>
 				</div>
 			</div>
