@@ -71,13 +71,19 @@ export default async function BlogPostPage(props: { params: Promise<{ id: string
 			<div className='bg-white'>
 				<div className={getContainerClass('withPadding')}>
 					<div className='flex flex-col gap-2'>
-						<p className='text-dark-gray'>
-							{new Date(blogPost.publishedAt).toLocaleDateString('pl-PL', {
-								day: '2-digit',
-								month: '2-digit',
-								year: 'numeric'
-							})}
-						</p>
+						<div className='flex justify-between text-sm '>
+							<p className='text-dark-gray'>
+								{new Date(blogPost.publishedAt).toLocaleDateString('pl-PL', {
+									day: '2-digit',
+									month: '2-digit',
+									year: 'numeric'
+								})}
+							</p>
+							<p className='text-gray-500 text-sm'>
+								{'Autor: '}
+								<strong>{blogPost.author}</strong>
+							</p>
+						</div>
 						<h3 className='text-title font-bold text-dark-gray'>{blogPost.title}</h3>
 						<div className='flex flex-wrap gap-3'>
 							{blogPost.tags.map((tag) => (

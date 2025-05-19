@@ -32,28 +32,15 @@ export const footer = defineType({
 			description: 'Tutaj wpisz opis prawej kolumny'
 		}),
 		defineField({
-			name: 'address',
-			title: 'Address',
-			type: 'string',
-			description: 'Tutaj wpisz adres'
-		}),
-		defineField({
-			name: 'phone',
-			title: 'Phone',
-			type: 'string',
-			description: 'Tutaj wpisz numer telefonu'
-		}),
-		defineField({
-			name: 'email',
-			title: 'Email',
-			type: 'string',
-			description: 'Tutaj wpisz adres email'
-		}),
-		defineField({
 			name: 'socialMedia',
 			title: 'Social Media',
 			type: 'array',
 			of: [{ type: 'reference', to: [{ type: 'socialMedia' }] }]
 		})
-	]
+	],
+	preview: {
+		select: {
+			title: 'leftTitle'
+		}
+	}
 })

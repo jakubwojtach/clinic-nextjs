@@ -132,13 +132,19 @@ export const BlogList = async ({
 							<div className='flex flex-col text-dark-gray'>
 								<Link href={`/blog/${featuredPost._id}`} className='cursor-pointer flex flex-col'>
 									<div className='sm:p-8 pt-4 px-4 flex gap-2 flex-col'>
-										<p className='text-gray-500 text-sm'>
-											{new Date(featuredPost.publishedAt).toLocaleDateString('pl-PL', {
-												day: '2-digit',
-												month: '2-digit',
-												year: 'numeric'
-											})}
-										</p>
+										<div className='flex justify-between text-sm '>
+											<p className='text-gray-500 text-sm'>
+												{new Date(featuredPost.publishedAt).toLocaleDateString('pl-PL', {
+													day: '2-digit',
+													month: '2-digit',
+													year: 'numeric'
+												})}
+											</p>
+											<p className='text-gray-500 text-sm'>
+												{'Autor: '}
+												<strong>{featuredPost.author}</strong>
+											</p>
+										</div>
 										<h3 className='text-lg sm:text-2xl font-bold'>{featuredPost.title}</h3>
 										<p className='pb-4 sm:text-lg'>{featuredPost.content[0].children[0].text.slice(0, 200)}...</p>
 									</div>
@@ -175,13 +181,17 @@ export const BlogList = async ({
 								/>
 							</div>
 							<div className='p-6 flex gap-2 flex-col'>
-								<div className='grid grid-cols-2 gap-2 text-sm '>
+								<div className='flex justify-between text-sm '>
 									<p className='text-gray-500 text-sm'>
 										{new Date(post.publishedAt).toLocaleDateString('pl-PL', {
 											day: '2-digit',
 											month: '2-digit',
 											year: 'numeric'
 										})}
+									</p>
+									<p className='text-gray-500 text-sm'>
+										{'Autor: '}
+										<strong>{post.author}</strong>
 									</p>
 								</div>
 								<h3 className='text-lg font-bold'>{post.title}</h3>

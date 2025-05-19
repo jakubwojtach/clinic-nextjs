@@ -10,17 +10,20 @@ export const accordionHomepage = defineType({
 		defineField({
 			name: 'title',
 			title: 'Tytuł',
-			type: 'string'
+			type: 'string',
+			description: 'Tutaj wpisz tytuł sekcji'
 		}),
 		defineField({
 			name: 'description',
 			title: 'Opis',
-			type: 'text'
+			type: 'text',
+			description: 'Tutaj wpisz opis sekcji'
 		}),
 		defineField({
 			name: 'image',
 			title: 'Obrazek',
-			type: 'image'
+			type: 'image',
+			description: 'Tutaj wstaw obrazek. Najlepiej w formacie 16:9'
 		})
 	]
 })

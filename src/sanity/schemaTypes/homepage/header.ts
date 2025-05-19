@@ -54,5 +54,10 @@ export const homepageHeader = defineType({
 				list: ALLOWED_PAGES
 			}
 		})
-	]
+	],
+	preview: {
+		select: {
+			title: 'title'
+		}
+	}
 })

@@ -15,7 +15,7 @@ import { footer } from './footer'
 import { achievements } from './homepage/achievements'
 import { aboutHeader } from './about/header'
 import { contactHeader } from './contact/contactHeader'
-
+import companyDetails from './companyDetails'
 export const schema: { types: SchemaTypeDefinition[] } = {
 	types: [
 		blogPost,
@@ -33,6 +33,7 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		achievements,
 		footer,
 		aboutHeader,
-		contactHeader
+		contactHeader,
+		companyDetails
 	]
 }

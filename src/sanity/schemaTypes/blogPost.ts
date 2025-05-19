@@ -3,25 +3,28 @@ import { defineType, defineField } from 'sanity'
 
 export const blogPost = defineType({
 	name: 'blogPost',
-	title: 'Posty baza wiedzy',
+	title: 'Posty - Blog',
 	type: 'document',
 	icon: IconFileText,
 	fields: [
 		defineField({
 			name: 'title',
 			title: 'Tytuł posta',
-			type: 'string'
+			type: 'string',
+			description: 'Tutaj wpisz tytuł posta'
 		}),
 		defineField({
 			name: 'content',
 			title: 'Treść posta',
+			description: 'Tutaj wpisz treść posta',
 			type: 'array',
 			of: [{ type: 'block' }]
 		}),
 		defineField({
 			name: 'author',
 			title: 'Autor',
-			type: 'string'
+			type: 'string',
+			description: 'Tutaj wpisz autora posta'
 		}),
 		defineField({
 			name: 'publishedAt',

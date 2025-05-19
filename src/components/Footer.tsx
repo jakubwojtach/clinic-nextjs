@@ -9,13 +9,15 @@ import {
 import Image from 'next/image'
 import { Button } from './common/Button'
 import Link from 'next/link'
-import { Footer as FooterType } from '@/types/sanity'
+import { CompanyDetails, Footer as FooterType } from '@/types/sanity'
 
 export const Footer = async () => {
 	const footer = await client.fetch<FooterType>(`*[_type == "footer"][0] {
 		...,
 		socialMedia[]->{_id, name, url, type}
 	}`)
+	const companyDetails = await client.fetch<CompanyDetails>(`*[_type == "companyDetails"][0]`)
+
 	const MAPPED_ICONS = footer.socialMedia.map((social) => {
 		switch (social.type) {
 			case 'facebook':
@@ -60,13 +62,13 @@ export const Footer = async () => {
 						<p>{footer.rightDescription}</p>
 						<div className='flex flex-col gap-2'>
 							<p>
-								<strong>Email:</strong> <a href={`mailto:${footer.email}`}>{footer.email}</a>
+								<strong>Email:</strong> <a href={`mailto:${companyDetails.email}`}>{companyDetails.email}</a>
 							</p>
 							<p>
-								<strong>Telefon:</strong> <a href={`tel:${footer.phone}`}>{footer.phone}</a>
+								<strong>Telefon:</strong> <a href={`tel:${companyDetails.phone}`}>{companyDetails.phone}</a>
 							</p>
 							<p>
-								<strong>Adres:</strong> {footer.address}
+								<strong>Adres:</strong> {companyDetails.address}
 							</p>
 						</div>
 						<Link href='/contact'>
@@ -79,7 +81,7 @@ export const Footer = async () => {
 				<div className='container flex flex-col gap-4 items-center text-white'>
 					<Image src='/logo.svg' alt='logo' width={160} height={30} />
 					<p className='text-center '>
-						&copy; {new Date().getFullYear()} Ginekologia by Dr. Grochecka. Wszelkie prawa zastrzeżone.
+						&copy; {new Date().getFullYear()} {companyDetails.name}. Wszelkie prawa zastrzeżone.
 					</p>
 				</div>
 			</div>

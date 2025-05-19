@@ -27,5 +27,10 @@ export const contactHeader = defineType({
 			title: 'Tekst alternatywny obrazka nagłówka',
 			type: 'string'
 		})
-	]
+	],
+	preview: {
+		select: {
+			title: 'title'
+		}
+	}
 })

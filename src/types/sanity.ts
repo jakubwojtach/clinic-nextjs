@@ -119,6 +119,13 @@ export interface Footer extends SanityDocument {
 	socialMedia: SanityDocument[]
 }
 
+export interface CompanyDetails extends SanityDocument {
+	name: string
+	address: string
+	phone: string
+	email: string
+}
+
 export interface Achievements extends SanityDocument {
 	title: string
 	icon: (typeof ICON_VALUES)[number]

@@ -3,14 +3,14 @@ import { getContainerClass } from '@/utils/utils'
 import { ContactForm } from '@/components/ContactForm/ContactForm'
 import { Header } from '@/components/Header'
 import { client } from '@/sanity/lib/client'
-import { FAQ, Footer, GenericHeader } from '@/types/sanity'
+import { FAQ, CompanyDetails, GenericHeader } from '@/types/sanity'
 import classNames from 'classnames'
 import { urlFor } from '@/sanity/lib/image'
 
 export default async function ContactPage() {
 	const faq = await client.fetch<FAQ[]>(`*[_type == "faq"]`)
 	const contactHeader = await client.fetch<GenericHeader>(`*[_type == "contactHeader"][0]`)
-	const footer = await client.fetch<Footer>(`*[_type == "footer"][0]`)
+	const companyDetails = await client.fetch<CompanyDetails>(`*[_type == "companyDetails"][0]`)
 
 	const preparedFAQItems = faq.map((item) => ({
 		title: item.question,
@@ -32,17 +32,17 @@ export default async function ContactPage() {
 			<div className={classNames(getContainerClass('withPadding'), 'text-light-pink gap-10 flex flex-col w-full')}>
 				<div className='flex flex-col gap-2'>
 					<h3 className='text-title font-bold'>Wskazówki dojazdu</h3>
-					<p className='font-semibold'>Ginekologia by Dr. Grochecka</p>
+					<p className='font-semibold'>{companyDetails.name}</p>
 				</div>
 				<div className='flex flex-col gap-1'>
 					<p>
-						<strong>Adres:</strong> {footer.address}
+						<strong>Adres:</strong> {companyDetails.address}
 					</p>
 					<p>
-						<strong>Telefon:</strong> <a href={`tel:${footer.phone}`}>{footer.phone}</a>
+						<strong>Telefon:</strong> <a href={`tel:${companyDetails.phone}`}>{companyDetails.phone}</a>
 					</p>
 					<p>
-						<strong>Email:</strong> <a href={`mailto:${footer.email}`}>{footer.email}</a>
+						<strong>Email:</strong> <a href={`mailto:${companyDetails.email}`}>{companyDetails.email}</a>
 					</p>
 				</div>
 				<div className='w-full flex items-center justify-center h-[200px] sm:h-[400px] bg-dark-gray/10 rounded-2xl group cursor-pointer shadow-2xl'>
