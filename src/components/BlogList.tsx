@@ -1,6 +1,6 @@
 import { client } from '@/sanity/lib/client'
 import { BlogPost, SectionTitles } from '@/types/sanity'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { Title } from './common/Title'
 import { Button } from './common/Button'
@@ -204,8 +204,10 @@ export const BlogList = async ({
 			</div>
 			{totalPages > 1 && withPagination && <Pagination className='mx-auto' totalPages={totalPages} />}
 			{withButton && (
-				<Link href='/blog' className='w-full sm:w-fit px-8'>
-					<Button variant='lightPink'>Czytaj więcej postów</Button>
+				<Link href='/blog' className='w-full sm:w-fit sm:px-8'>
+					<Button variant='lightPink' className='w-full sm:w-fit'>
+						Czytaj więcej postów
+					</Button>
 				</Link>
 			)}
 		</div>

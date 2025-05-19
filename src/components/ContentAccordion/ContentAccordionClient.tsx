@@ -3,7 +3,7 @@
 import classNames from 'classnames'
 import { Title } from '../common/Title'
 import { useState } from 'react'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { AccordionHomepage, SectionTitles } from '@/types/sanity'
 import { getContainerClass } from '../../utils/utils'

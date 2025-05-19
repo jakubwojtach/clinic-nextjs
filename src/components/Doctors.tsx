@@ -1,7 +1,7 @@
 import { client } from '@/sanity/lib/client'
 import { Doctor, SectionTitles } from '@/types/sanity'
 import { Title } from './common/Title'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
 import { Button } from './common/Button'
@@ -24,25 +24,32 @@ export const Doctors = async ({ limit = 4, withButton = true }: { limit?: number
 				{doctors.map((doctor) => (
 					<Link
 						href={`/doctors/${doctor._id}`}
-						className='flex flex-col gap-8 group transition-all duration-300'
+						className='flex flex-col gap-4 lg:gap-8 group transition-all duration-300'
 						key={doctor._id}
 					>
-						<div className='relative max-w-full sm:max-w-[250px] h-[250px] sm:h-[350px] rounded-lg rounded-tl-3xl overflow-hidden group-hover:scale-105 transition-all duration-300 group-hover:shadow-2xl border-[1px] border-light-pink/10'>
-							<Image src={urlFor(doctor.image).url()} alt={doctor.name} layout='fill' className='object-cover' />
+						<div className='relative max-w-full lg:max-w-[250px] md:h-[250px] h-[200px] lg:h-[350px] rounded-lg lg:rounded-tl-3xl overflow-hidden group-hover:scale-105 transition-all duration-300 group-hover:shadow-2xl border-[1px] border-light-pink/10'>
+							<Image
+								src={urlFor(doctor.image).url()}
+								alt={doctor.name}
+								layout='fill'
+								className='object-cover object-top'
+							/>
 						</div>
-						<div className='flex flex-col gap-2'>
+						<div className='flex flex-col gap-2 items-center lg:items-start'>
 							<h3 className='text-lg font-bold text-light-pink'>{doctor.name}</h3>
 							<p className='text-sm text-black'>{doctor.specialization}</p>
 						</div>
-						<p className='text-sm text-light-pink font-bold underline group-hover:text-pink transition-all duration-300'>
+						<p className='text-sm text-light-pink font-bold underline group-hover:text-pink transition-all duration-300 self-center lg:self-start'>
 							Czytaj o lekarzu
 						</p>
 					</Link>
 				))}
 			</div>
 			{withButton && (
-				<Link href='/doctors' className='w-full sm:w-fit px-8'>
-					<Button variant='lightPink'>Poznaj naszą kadrę</Button>
+				<Link href='/doctors' className='w-full sm:w-fit sm:px-8'>
+					<Button variant='lightPink' className='w-full sm:w-fit'>
+						Poznaj naszą kadrę
+					</Button>
 				</Link>
 			)}
 		</div>

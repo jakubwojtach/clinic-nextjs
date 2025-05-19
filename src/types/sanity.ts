@@ -53,6 +53,8 @@ export interface Doctor extends SanityDocument {
 	description: string
 	experience: string
 	education: string
+	publications: string[]
+	awards: string[]
 }
 
 export interface AccordionHomepage extends SanityDocument {

@@ -2,7 +2,7 @@
 
 import React from 'react'
 import Link from 'next/link'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import classNames from 'classnames'
 import { IconMenuDeep, IconX } from '@tabler/icons-react'
@@ -23,9 +23,9 @@ export const Nav = ({ links, logo }: NavProps) => {
 	return (
 		<nav className='flex flex-row gap-4 bg-dark-gray/90 sticky top-0 z-50 py-5 left-0 right-0 backdrop-blur-sm px-6 xl:px-0'>
 			<div className='container flex justify-between items-center'>
-				<div className='h-[50px] sm:h-[60px] relative w-[250px]'>
+				<Link href='/' className='h-[50px] sm:h-[60px] relative w-[250px]'>
 					<Image src={logo} alt='logo' layout='fill' className='object-contain' />
-				</div>
+				</Link>
 				<button
 					className='flex items-center justify-center lg:hidden text-white transition-all duration-300 relative w-10 h-10'
 					onClick={() => setIsOpen(!isOpen)}

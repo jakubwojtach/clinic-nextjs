@@ -24,8 +24,8 @@ export default async function AboutPage() {
 			{separatorWithButton.enable && separatorWithButton.allowedPages.includes('about') && (
 				<div className='bg-dark-gray w-full py-8 xl:py-16 px-6 xl:px-0'>
 					<Title className='text-light-pink' title={separatorWithButton.title}>
-						<Link href={separatorWithButton.buttonLink} className='sm:ml-auto'>
-							<Button variant='white' className='sm:w-fit md:px-32 mx-auto w-full'>
+						<Link href={separatorWithButton.buttonLink} className='xl:ml-auto'>
+							<Button variant='white' className='xl:w-fit xl:px-32 mx-auto w-full'>
 								{separatorWithButton.buttonTitle}
 							</Button>
 						</Link>

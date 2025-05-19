@@ -49,9 +49,9 @@ export default async function ContactPage() {
 					<p className='opacity-50 group-hover:opacity-100 transition-all duration-300'>Mapa będzie tutaj</p>
 				</div>
 			</div>
-			<div className='grid grid-cols-1 lg:grid-cols-2 w-full'>
-				<div className='flex flex-col gap-4 bg-dark-gray text-white py-8 sm:py-16 '>
-					<div className='sm:w-[540px]  sm:ml-auto sm:mr-[60px] mx-6 flex flex-col gap-8'>
+			<div className='grid grid-cols-1 xl:grid-cols-2 w-full'>
+				<div className='flex flex-col gap-4 bg-dark-gray text-white py-8 sm:py-16 xl:pr-0 pr-16'>
+					<div className='xl:w-[540px] w-full xl:ml-auto xl:mr-[60px] mx-6 flex flex-col gap-8'>
 						<div className='gap-2'>
 							<h3 className='text-title font-bold'>Napisz do nas</h3>
 							<p>Skorzystaj z formularza poniżej, aby skontaktować się z nami.</p>
@@ -59,8 +59,8 @@ export default async function ContactPage() {
 						<ContactForm />
 					</div>
 				</div>
-				<div className='flex flex-col gap-4 bg-pink text-dark-gray py-8 sm:py-16'>
-					<div className='sm:w-[540px] sm:mr-auto sm:ml-[60px] mx-6 gap-8 flex flex-col'>
+				<div className='flex flex-col gap-4 bg-pink text-dark-gray py-8 sm:py-16 xl:pr-0 pr-16'>
+					<div className='xl:w-[540px] w-full lg:mr-auto xl:ml-[60px] mx-6 gap-8 flex flex-col'>
 						<div className='flex flex-col gap-2'>
 							<h3 className='text-title font-bold'>FAQ</h3>
 							<p>Odpowiedzi na najczęstsze pytania</p>

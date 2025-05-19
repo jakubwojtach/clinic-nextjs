@@ -2,7 +2,7 @@
 
 import { IconChevronDown } from '@tabler/icons-react'
 import classNames from 'classnames'
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 interface AccordionProps {
 	items: {
@@ -15,6 +15,9 @@ interface AccordionProps {
 
 export const Accordion = ({ items, allowMultipleOpen = false }: AccordionProps) => {
 	const [activeItem, setActiveItem] = useState<string[]>([])
+	useEffect(() => {
+		setActiveItem([items[0].id])
+	}, [items])
 
 	const handleItemClick = useCallback(
 		(id: string) => {
@@ -30,14 +33,18 @@ export const Accordion = ({ items, allowMultipleOpen = false }: AccordionProps) 
 	)
 	return (
 		<div className='flex flex-col gap-4 w-full'>
-			{items.map((item) => (
+			{items.map((item, index) => (
 				<button key={item.id} className='relative w-full' onClick={() => handleItemClick(item.id)}>
-					<div className='flex flex-col gap-2 pr-4 items-start justify-start'>
-						<h3 className='text-lg font-bold text-left'>{item.title}</h3>
+					<div
+						className={classNames('flex flex-col gap-2 pr-4 items-start justify-start  border-dark-gray pb-4', {
+							'border-b-[1px]': index !== items.length - 1,
+							'border-b-0': index === items.length - 1
+						})}
+					>
+						<h3 className='text-lg font-bold text-left max-w-[90%] '>{item.title}</h3>
 						<p
 							className={classNames('text-sm text-left', {
-								hidden: !activeItem.includes(item.id),
-								'border-b-[2px] border-dark-gray pb-4': activeItem.includes(item.id)
+								hidden: !activeItem.includes(item.id)
 							})}
 						>
 							{item.content}

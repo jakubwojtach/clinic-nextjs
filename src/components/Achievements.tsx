@@ -1,5 +1,5 @@
 import { client } from '@/sanity/lib/client'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { Achievements as AchievementType } from '@/types/sanity'
 import { renderIcon } from '@/utils/icon'
@@ -10,7 +10,7 @@ export const Achievements = async () => {
 
 	return (
 		<>
-			<div className='relative w-full h-[200px] sm:h-[450px] mt-12'>
+			<div className='relative w-full h-[200px] md:h-[300px] lg:h-[450px] mt-12'>
 				<Image
 					src={urlFor(dividerImage[0].image).url()}
 					alt='Osiągnięcia'
@@ -19,7 +19,7 @@ export const Achievements = async () => {
 				/>
 			</div>
 			<div className='w-full bg-dark-gray py-8 sm:py-16 px-6 xl:px-0'>
-				<div className='container grid grid-cols-2 sm:grid-cols-3 gap-8 xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] xl:max-w-[1200px] xl:gap-16 items-center justify-center w-full mx-auto'>
+				<div className='container grid grid-cols-2 lg:grid-cols-3 gap-8 xl:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] xl:max-w-[1200px] xl:gap-16 items-center justify-center w-full mx-auto'>
 					{achievements.map((achievement) => (
 						<div key={achievement._id} className='flex flex-col gap-4 text-light-pink items-center justify-center'>
 							{renderIcon(achievement.icon)}

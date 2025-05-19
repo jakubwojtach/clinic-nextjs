@@ -6,7 +6,7 @@ import {
 	IconBrandTwitter,
 	IconBrandYoutube
 } from '@tabler/icons-react'
-import Image from 'next/legacy/image'
+import Image from 'next/image'
 import { Button } from './common/Button'
 import Link from 'next/link'
 import { Footer as FooterType } from '@/types/sanity'
