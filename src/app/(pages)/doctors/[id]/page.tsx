@@ -30,7 +30,7 @@ export default async function DoctorPage(props: { params: Promise<{ id: string }
 									<strong className='text-gray-500'>Edukacja:</strong> {doctor.education}
 								</span>
 							:	null}
-							{doctor.publications.length > 0 ?
+							{doctor.publications?.length > 0 ?
 								<span className='text-sm lg:text-base flex flex-col gap-1 '>
 									<strong className='text-gray-500'>Ostatnia publikacja:</strong> {doctor.publications[0]}
 								</span>
