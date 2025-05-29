@@ -14,19 +14,27 @@ export default async function DoctorPage(props: { params: Promise<{ id: string }
 					<div className='flex flex-col gap-4 order-2 md:order-1'>
 						<h2 className='text-title font-bold text-dark-gray'>{doctor.name}</h2>
 						<div className='grid grid-cols-1 md:grid-cols-2 gap-2'>
-							<span className='text-sm lg:text-base flex flex-col gap-1 '>
-								<strong className='text-gray-500'>Specjalizacja:</strong> {doctor.specialization}
-							</span>
-							<span className='text-sm lg:text-base flex flex-col gap-1 '>
-								<strong className='text-gray-500'>Doświadczenie:</strong> {doctor.experience}{' '}
-								{Number(doctor.experience) > 1 ? 'lata' : 'rok'}
-							</span>
-							<span className='text-sm lg:text-base flex flex-col gap-1 '>
-								<strong className='text-gray-500'>Edukacja:</strong> {doctor.education}
-							</span>
-							<span className='text-sm lg:text-base flex flex-col gap-1 '>
-								<strong className='text-gray-500'>Ostatnia publikacja:</strong> {doctor.publications[0]}
-							</span>
+							{doctor.specialization ?
+								<span className='text-sm lg:text-base flex flex-col gap-1 '>
+									<strong className='text-gray-500'>Specjalizacja:</strong> {doctor.specialization}
+								</span>
+							:	null}
+							{doctor.experience ?
+								<span className='text-sm lg:text-base flex flex-col gap-1 '>
+									<strong className='text-gray-500'>Doświadczenie:</strong> {doctor.experience}{' '}
+									{Number(doctor.experience) > 1 ? 'lata' : 'rok'}
+								</span>
+							:	null}
+							{doctor.education ?
+								<span className='text-sm lg:text-base flex flex-col gap-1 '>
+									<strong className='text-gray-500'>Edukacja:</strong> {doctor.education}
+								</span>
+							:	null}
+							{doctor.publications.length > 0 ?
+								<span className='text-sm lg:text-base flex flex-col gap-1 '>
+									<strong className='text-gray-500'>Ostatnia publikacja:</strong> {doctor.publications[0]}
+								</span>
+							:	null}
 						</div>
 						<p className='text-base lg:text-lg mt-4'>
 							<strong>Kilka słów o lekarzu:</strong> <br />
