@@ -1,5 +1,4 @@
-import { client } from '@/sanity/lib/client'
-import { BlogPost, SectionTitles } from '@/types/sanity'
+import { BlogPost } from '@/types/sanity'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import { Title } from './common/Title'
@@ -8,80 +7,19 @@ import Link from 'next/link'
 import { getContainerClass } from '../utils/utils'
 import { Filters } from './Filters'
 import { Pagination } from './common/Pagination'
-import { unstable_cache } from 'next/cache'
-
-// Server component for data fetching with caching
-const getBlogPosts = unstable_cache(
-	async (
-		page: number,
-		perPage: number,
-		tag?: string,
-		sort?: string,
-		searchQuery?: string,
-		skipFeaturedInList = false
-	) => {
-		const baseQuery = `*[_type == "blogPost" ${tag ? `&& "${tag}" in tags[]->name` : ''} ${
-			searchQuery ? `&& (title match "${searchQuery}*" || content[0].children[0].text match "${searchQuery}*")` : ''
-		}`
-
-		// Get featured posts first
-		const featuredQuery = `${baseQuery} && isFeatured == true]`
-
-		// Get regular posts (excluding featured ones)
-		const regularQuery =
-			skipFeaturedInList ? `${baseQuery}]` : `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
-
-		const [featuredPost, regularPosts, total] = await Promise.all([
-			client.fetch<BlogPost | null>(
-				`${featuredQuery} | order(${sort || 'publishedAt desc'}) [0] {
-					...,
-					tags[]->{
-						_id,
-						name
-					}
-				}`
-			),
-			client.fetch<BlogPost[]>(
-				`${regularQuery} | order(${sort || 'publishedAt desc'}) [${(page - 1) * perPage}...${page * perPage}] {
-					...,
-					tags[]->{
-						_id,
-						name
-					}
-				}`
-			),
-			client.fetch<number>(`count(${regularQuery})`)
-		])
-
-		return {
-			featuredPost,
-			posts: regularPosts,
-			total,
-			totalPages: Math.ceil(total / perPage)
-		}
-	},
-	['blog-posts'],
-	{ revalidate: 60 }
-)
-
-export async function getTags() {
-	return await client.fetch<BlogPost['tags']>(`*[_type == "tags"] {
-		_id,
-		name
-	}`)
-}
+import { getBlogPosts, getTags, getSectionTitle } from '@/lib/sanity-queries'
 
 interface BlogListProps {
 	withButton?: boolean
 	tag?: string
 	sort?: string
+	searchQuery?: string
 	withTitle?: boolean
 	withFilters?: boolean
 	perPage?: number
 	page?: number
 	withPagination?: boolean
 	withFeatured?: boolean
-	searchQuery?: string
 }
 
 // Client component for rendering
@@ -97,15 +35,13 @@ export const BlogList = async ({
 	withPagination = false,
 	withFeatured = false
 }: BlogListProps) => {
-	const {
-		posts: blogPosts,
-		totalPages,
-		featuredPost
-	} = await getBlogPosts(page, perPage, tag, sort, searchQuery, !withFeatured)
-	const tags = await getTags()
-	const sectionTitle = await client.fetch<SectionTitles>(
-		`*[_type == "sectionTitles" && slug.current == "nasze-artykuly"][0]`
-	)
+	const [blogData, tags, sectionTitle] = await Promise.all([
+		getBlogPosts(page, perPage, tag, sort, searchQuery, !withFeatured),
+		getTags(),
+		getSectionTitle('nasze-artykuly')
+	])
+
+	const { posts: blogPosts, totalPages, featuredPost } = blogData
 
 	return (
 		<div className={getContainerClass('centered')}>

@@ -12,13 +12,18 @@ import type {
 	FAQ,
 	GenericHeader,
 	SeparatorWithButton,
-	BlogPost
+	BlogPost,
+	AccordionHomepage,
+	Achievements
 } from '@/types/sanity'
 
 // Common section titles fetch
 export const getSectionTitle = unstable_cache(
 	async (slug: string) => {
-		return await client.fetch<SectionTitles>(`*[_type == "sectionTitles" && slug.current == $slug][0]`, { slug })
+		return await client.fetch<SectionTitles>(
+			`*[_type == "sectionTitles" && slug.current == $slug] | order(_updatedAt desc)[0]`,
+			{ slug }
+		)
 	},
 	['section-title'],
 	{ revalidate: REVALIDATE_TIME }
@@ -45,7 +50,7 @@ export const getDoctors = unstable_cache(
 // Single doctor fetch
 export const getDoctor = unstable_cache(
 	async (id: string) => {
-		return await client.fetch<Doctor>(`*[_type == "doctor" && _id == $id][0]`, { id })
+		return await client.fetch<Doctor>(`*[_type == "doctor" && _id == $id] | order(_updatedAt desc)[0]`, { id })
 	},
 	['doctor'],
 	{ revalidate: REVALIDATE_TIME }
@@ -120,7 +125,16 @@ export const getSeparatorWithButton = unstable_cache(
 // Blog post fetch
 export const getBlogPost = unstable_cache(
 	async (id: string) => {
-		return await client.fetch<BlogPost>(`*[_type == "blogPost" && _id == $id][0]`, { id })
+		return await client.fetch<BlogPost>(
+			`*[_type == "blogPost" && _id == $id] | order(_updatedAt desc)[0]{
+			...,
+			tags[]->{
+				_id,
+				name
+			}
+		}`,
+			{ id }
+		)
 	},
 	['blog-post'],
 	{ revalidate: REVALIDATE_TIME }
@@ -132,5 +146,116 @@ export const getBlogPostIds = unstable_cache(
 		return await client.fetch(`*[_type == "blogPost"]._id`)
 	},
 	['blog-post-ids'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Contact header fetch
+export const getContactHeader = unstable_cache(
+	async () => {
+		return await client.fetch<GenericHeader>(`*[_type == "contactHeader"] | order(_updatedAt desc)[0]`)
+	},
+	['contact-header'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// About header fetch
+export const getAboutHeader = unstable_cache(
+	async () => {
+		return await client.fetch<GenericHeader>(`*[_type == "aboutHeader"] | order(_updatedAt desc)[0]`)
+	},
+	['about-header'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Blog posts fetch with pagination, filtering, and sorting
+export const getBlogPosts = unstable_cache(
+	async (
+		page: number,
+		perPage: number,
+		tag?: string,
+		sort?: string,
+		searchQuery?: string,
+		skipFeaturedInList = false
+	) => {
+		const baseQuery = `*[_type == "blogPost" ${tag ? `&& "${tag}" in tags[]->name` : ''} ${
+			searchQuery ? `&& (title match "${searchQuery}*" || content[0].children[0].text match "${searchQuery}*")` : ''
+		}`
+
+		// Get featured posts first
+		const featuredQuery = `${baseQuery} && isFeatured == true]`
+
+		// Get regular posts (excluding featured ones)
+		const regularQuery =
+			skipFeaturedInList ? `${baseQuery}]` : `${baseQuery} && (isFeatured != true || !defined(isFeatured))]`
+
+		const [featuredPost, regularPosts, total] = await Promise.all([
+			client.fetch<BlogPost | null>(
+				`${featuredQuery} | order(${sort || 'publishedAt desc'}) [0] {
+					...,
+					tags[]->{
+						_id,
+						name
+					}
+				}`
+			),
+			client.fetch<BlogPost[]>(
+				`${regularQuery} | order(${sort || 'publishedAt desc'}) [${(page - 1) * perPage}...${page * perPage}] {
+					...,
+					tags[]->{
+						_id,
+						name
+					}
+				}`
+			),
+			client.fetch<number>(`count(${regularQuery})`)
+		])
+
+		return {
+			featuredPost,
+			posts: regularPosts,
+			total,
+			totalPages: Math.ceil(total / perPage)
+		}
+	},
+	['blog-posts'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Tags fetch
+export const getTags = unstable_cache(
+	async () => {
+		return await client.fetch<BlogPost['tags']>(`*[_type == "tags"] {
+			_id,
+			name
+		}`)
+	},
+	['tags'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Accordion homepage fetch
+export const getAccordionHomepage = unstable_cache(
+	async (limit?: number) => {
+		return await client.fetch<AccordionHomepage[]>(`*[_type == "accordionHomepage"]${limit ? `[0...${limit}]` : ''}`)
+	},
+	['accordion-homepage'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Achievements fetch
+export const getAchievements = unstable_cache(
+	async () => {
+		return await client.fetch<Achievements[]>(`*[_type == "achievements"]`)
+	},
+	['achievements'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Divider image fetch
+export const getDividerImage = unstable_cache(
+	async () => {
+		return await client.fetch(`*[_type == "images" && name == "homepage-divider"] | order(_updatedAt desc)[0]`)
+	},
+	['divider-image'],
 	{ revalidate: REVALIDATE_TIME }
 )

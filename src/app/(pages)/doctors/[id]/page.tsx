@@ -1,12 +1,11 @@
 import { Doctors } from '@/components/Doctors'
 import Image from 'next/image'
-import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { Doctor } from '@/types/sanity'
+import { getDoctor } from '@/lib/sanity-queries'
 
 export default async function DoctorPage(props: { params: Promise<{ id: string }> }) {
 	const params = await props.params
-	const doctor = await client.fetch<Doctor>(`*[_type == "doctor" && _id == $id][0]`, { id: params.id })
+	const doctor = await getDoctor(params.id)
 	return (
 		<>
 			<div className='bg-white'>

@@ -1,12 +1,11 @@
-import { client } from '@/sanity/lib/client'
-import { HomepageHeader as HomepageHeaderType } from '@/types/sanity'
 import { Button } from './common/Button'
 import { Header } from './Header'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
+import { getHomepageHeader } from '@/lib/sanity-queries'
 
 export const HomepageHeader = async () => {
-	const homepageHeader = await client.fetch<HomepageHeaderType>(`*[_type == "homepageHeader"][0]`)
+	const homepageHeader = await getHomepageHeader()
 
 	return (
 		<Header

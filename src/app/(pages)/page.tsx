@@ -6,14 +6,14 @@ import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion
 import { Button } from '@/components/common/Button'
 import { Achievements } from '@/components/Achievements'
 import Link from 'next/link'
-import { client } from '@/sanity/lib/client'
-import { SectionTitles, SeparatorWithButton } from '@/types/sanity'
 import { HomepageHeader } from '@/components/HomepageHeader'
+import { getSeparatorWithButton, getSectionTitle } from '@/lib/sanity-queries'
+
 export default async function IndexPage() {
-	const separatorWithButton = await client.fetch<SeparatorWithButton | null>(`*[_type == "separatorWithButton"][0]`)
-	const sectionTitle = await client.fetch<SectionTitles | null>(
-		`*[_type == "sectionTitles" && slug.current == "nasze-osiagniecia"][0]`
-	)
+	const [separatorWithButton, sectionTitle] = await Promise.all([
+		getSeparatorWithButton(),
+		getSectionTitle('nasze-osiagniecia')
+	])
 
 	return (
 		<>

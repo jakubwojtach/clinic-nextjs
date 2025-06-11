@@ -1,15 +1,14 @@
 import { getContainerClass } from '@/utils/utils'
-import { client } from '@/sanity/lib/client'
 import { urlFor } from '@/sanity/lib/image'
-import { BlogPost } from '@/types/sanity'
 import Image from 'next/image'
 import Link from 'next/link'
 import { PortableText, PortableTextComponents } from '@portabletext/react'
 import { BlogList } from '@/components/BlogList'
+import { getBlogPost, getBlogPostIds } from '@/lib/sanity-queries'
 
 // This function tells Next.js which paths to pre-render at build time
 export async function generateStaticParams() {
-	const posts = await client.fetch(`*[_type == "blogPost"]._id`)
+	const posts = await getBlogPostIds()
 	return posts.map((id: string) => ({
 		id: id
 	}))
@@ -51,16 +50,7 @@ const components: PortableTextComponents = {
 
 export default async function BlogPostPage(props: { params: Promise<{ id: string }> }) {
 	const params = await props.params
-	const blogPost = await client.fetch<BlogPost>(
-		`*[_type == "blogPost" && _id == $id][0]{
-		...,
-		tags[]->{
-			_id,
-			name
-		}
-	}`,
-		{ id: params.id }
-	)
+	const blogPost = await getBlogPost(params.id)
 
 	if (!blogPost) {
 		return <div>Blog post not found</div>

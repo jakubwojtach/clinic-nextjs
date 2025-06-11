@@ -2,17 +2,14 @@ import { AboutTabs } from '@/components/AboutTabs/AboutTabs'
 import { Button } from '@/components/common/Button'
 import { Title } from '@/components/common/Title'
 import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion'
-//import { Doctors } from '@/components/Doctors'
 import { Header } from '@/components/Header'
 import { Testimonials } from '@/components/Testimonials'
-import { client } from '@/sanity/lib/client'
-import { GenericHeader, SeparatorWithButton } from '@/types/sanity'
 import Link from 'next/link'
 import { urlFor } from '@/sanity/lib/image'
+import { getSeparatorWithButton, getAboutHeader } from '@/lib/sanity-queries'
 
 export default async function AboutPage() {
-	const separatorWithButton = await client.fetch<SeparatorWithButton>(`*[_type == "separatorWithButton"][0]`)
-	const aboutHeader = await client.fetch<GenericHeader>(`*[_type == "aboutHeader"][0]`)
+	const [separatorWithButton, aboutHeader] = await Promise.all([getSeparatorWithButton(), getAboutHeader()])
 
 	return (
 		<>
@@ -40,7 +37,6 @@ export default async function AboutPage() {
 					imageAlt={aboutHeader.imageAlt}
 				/>
 			</div>
-			{/*<Doctors />*/}
 		</>
 	)
 }

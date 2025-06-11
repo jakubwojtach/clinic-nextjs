@@ -1,18 +1,16 @@
-import { client } from '@/sanity/lib/client'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
-import { Achievements as AchievementType } from '@/types/sanity'
 import { renderIcon } from '@/utils/icon'
+import { getAchievements, getDividerImage } from '@/lib/sanity-queries'
 
 export const Achievements = async () => {
-	const dividerImage = await client.fetch(`*[_type == "images"][name == "homepage-divider"]`)
-	const achievements = await client.fetch<AchievementType[]>(`*[_type == "achievements"]`)
+	const [dividerImage, achievements] = await Promise.all([getDividerImage(), getAchievements()])
 
 	return (
 		<>
 			<div className='relative w-full h-[200px] md:h-[300px] lg:h-[450px] mt-12'>
 				<Image
-					src={urlFor(dividerImage[0].image).url()}
+					src={urlFor(dividerImage.image).url()}
 					alt='Osiągnięcia'
 					layout='fill'
 					className='object-cover rounded-tl-[200px]'

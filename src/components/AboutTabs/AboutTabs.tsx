@@ -1,8 +1,7 @@
-import { AboutTab } from '@/types/sanity'
 import { AboutTabsClient } from './AboutTabsClient'
-import { client } from '@/sanity/lib/client'
+import { getAboutTabs } from '@/lib/sanity-queries'
 
 export const AboutTabs = async () => {
-	const aboutTabs = await client.fetch<AboutTab[]>(`*[_type == "aboutTabs"] | order(title asc)`)
+	const aboutTabs = await getAboutTabs()
 	return <AboutTabsClient aboutTabs={aboutTabs} />
 }

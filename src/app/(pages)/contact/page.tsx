@@ -2,15 +2,12 @@ import { Accordion } from '@/components/common/Accordion'
 import { getContainerClass } from '@/utils/utils'
 import { ContactForm } from '@/components/ContactForm/ContactForm'
 import { Header } from '@/components/Header'
-import { client } from '@/sanity/lib/client'
-import { FAQ, CompanyDetails, GenericHeader } from '@/types/sanity'
 import classNames from 'classnames'
 import { urlFor } from '@/sanity/lib/image'
+import { getFAQ, getCompanyDetails, getContactHeader } from '@/lib/sanity-queries'
 
 export default async function ContactPage() {
-	const faq = await client.fetch<FAQ[]>(`*[_type == "faq"]`)
-	const contactHeader = await client.fetch<GenericHeader>(`*[_type == "contactHeader"][0]`)
-	const companyDetails = await client.fetch<CompanyDetails>(`*[_type == "companyDetails"][0]`)
+	const [faq, contactHeader, companyDetails] = await Promise.all([getFAQ(), getContactHeader(), getCompanyDetails()])
 
 	const preparedFAQItems = faq.map((item) => ({
 		title: item.question,
