@@ -2,7 +2,7 @@ import { AboutTabs } from '@/components/AboutTabs/AboutTabs'
 import { Button } from '@/components/common/Button'
 import { Title } from '@/components/common/Title'
 import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion'
-import { Doctors } from '@/components/Doctors'
+//import { Doctors } from '@/components/Doctors'
 import { Header } from '@/components/Header'
 import { Testimonials } from '@/components/Testimonials'
 import { client } from '@/sanity/lib/client'
@@ -32,16 +32,15 @@ export default async function AboutPage() {
 					</Title>
 				</div>
 			)}
-			<div className='bg-light-pink w-full '>
+			<div className='w-full '>
 				<Header
 					title={aboutHeader.title}
 					description={aboutHeader.description}
 					imageUrl={urlFor(aboutHeader.image).url()}
 					imageAlt={aboutHeader.imageAlt}
-					textColor='text-dark-gray'
 				/>
 			</div>
-			<Doctors />
+			{/*<Doctors />*/}
 		</>
 	)
 }

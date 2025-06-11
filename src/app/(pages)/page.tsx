@@ -1,7 +1,7 @@
 import { Title } from '@/components/common/Title'
 import { BlogList } from '@/components/BlogList'
 import { Testimonials } from '@/components/Testimonials'
-import { Doctors } from '@/components/Doctors'
+//import { Doctors } from '@/components/Doctors'
 import { ContentAccordion } from '@/components/ContentAccordion/ContentAccordion'
 import { Button } from '@/components/common/Button'
 import { Achievements } from '@/components/Achievements'
@@ -39,7 +39,7 @@ export default async function IndexPage() {
 					</Title>
 				</div>
 			)}
-			<Doctors />
+			{/*<Doctors />*/}
 			<Testimonials limit={3} />
 			<BlogList />
 		</>

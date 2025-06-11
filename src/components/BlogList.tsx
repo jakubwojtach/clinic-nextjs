@@ -61,7 +61,7 @@ const getBlogPosts = unstable_cache(
 		}
 	},
 	['blog-posts'],
-	{ revalidate: 3600 }
+	{ revalidate: 60 }
 )
 
 export async function getTags() {

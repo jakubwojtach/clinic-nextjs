@@ -1,18 +1,18 @@
-import { client } from '@/sanity/lib/client'
 import { Title } from './common/Title'
-import { SectionTitles, Testimonial } from '@/types/sanity'
 import { IconStarFilled } from '@tabler/icons-react'
 import { getContainerClass } from '../utils/utils'
+import { getTestimonials, getSectionTitle } from '@/lib/sanity-queries'
 
 interface TestimonialsProps {
 	limit?: number
 }
 
 export const Testimonials = async ({ limit }: TestimonialsProps) => {
-	const testimonials = await client.fetch<Testimonial[]>(`*[_type == "testimonials"]${limit ? `[0...${limit}]` : ''}`)
-	const sectionTitle = await client.fetch<SectionTitles>(
-		`*[_type == "sectionTitles" && slug.current == "co-mowia-nasi-pacjenci"][0]`
-	)
+	const [testimonials, sectionTitle] = await Promise.all([
+		getTestimonials(limit),
+		getSectionTitle('co-mowia-nasi-pacjenci')
+	])
+
 	return (
 		<div className='w-full bg-light-pink '>
 			<div className={getContainerClass('centered')}>

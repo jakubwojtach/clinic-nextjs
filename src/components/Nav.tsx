@@ -10,8 +10,8 @@ import { useState } from 'react'
 
 const links = [
 	{ label: 'Strona główna', href: '/' },
-	{ label: 'O nas', href: '/about' },
-	{ label: 'Nasi lekarze', href: '/doctors' },
+	{ label: 'O mnie', href: '/about' },
+	//{ label: 'Nasi lekarze', href: '/doctors' },
 	{ label: 'Kontakt', href: '/contact' },
 	{ label: 'Baza wiedzy', href: '/blog' }
 ]

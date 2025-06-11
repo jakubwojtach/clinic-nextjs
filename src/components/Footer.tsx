@@ -1,4 +1,3 @@
-import { client } from '@/sanity/lib/client'
 import {
 	IconBrandFacebook,
 	IconBrandInstagram,
@@ -9,16 +8,17 @@ import {
 import Image from 'next/image'
 import { Button } from './common/Button'
 import Link from 'next/link'
-import { CompanyDetails, Footer as FooterType } from '@/types/sanity'
+import { getFooter, getCompanyDetails } from '@/lib/sanity-queries'
+
+interface SocialMediaItem {
+	name: string
+	url: string
+	type: 'facebook' | 'instagram' | 'twitter' | 'linkedin' | 'youtube'
+}
 
 export const Footer = async () => {
-	const footer = await client.fetch<FooterType>(`*[_type == "footer"][0] {
-		...,
-		socialMedia[]->{_id, name, url, type}
-	}`)
-	const companyDetails = await client.fetch<CompanyDetails>(`*[_type == "companyDetails"][0]`)
-
-	const MAPPED_ICONS = footer.socialMedia.map((social) => {
+	const [footer, companyDetails] = await Promise.all([getFooter(), getCompanyDetails()])
+	const MAPPED_ICONS = (footer.socialMedia as unknown as SocialMediaItem[]).map((social: SocialMediaItem) => {
 		switch (social.type) {
 			case 'facebook':
 				return <IconBrandFacebook />
@@ -43,9 +43,9 @@ export const Footer = async () => {
 						<h2 className='text-title font-bold'>{footer.leftTitle}</h2>
 						<p>{footer.leftDescription}</p>
 						<div className='flex flex-row gap-8'>
-							{footer.socialMedia.map((link, index) => (
+							{(footer.socialMedia as unknown as SocialMediaItem[]).map((link: SocialMediaItem, index: number) => (
 								<a
-									key={link._id}
+									key={link.name}
 									href={link.url}
 									target='_blank'
 									className='hover:scale-105 hover:shadow-2xl transition-all duration-300 w-10 h-10 flex items-center justify-center bg-pink rounded-full border-[2px] border-dark-gray hover:bg-dark-gray hover:text-white'
@@ -81,7 +81,7 @@ export const Footer = async () => {
 				<div className='container flex flex-col gap-4 items-center text-white'>
 					<Image src='/logo2.svg' alt='logo' width={160} height={30} />
 					<p className='text-center '>
-						&copy; {new Date().getFullYear()} {companyDetails.name}. <br />
+						&copy; {new Date().getFullYear()} {companyDetails.name} <br />
 						Wszelkie prawa zastrzeżone.
 					</p>
 				</div>

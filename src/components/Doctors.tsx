@@ -1,17 +1,14 @@
-import { client } from '@/sanity/lib/client'
-import { Doctor, SectionTitles } from '@/types/sanity'
 import { Title } from './common/Title'
 import Image from 'next/image'
 import { urlFor } from '@/sanity/lib/image'
 import Link from 'next/link'
 import { Button } from './common/Button'
 import { getContainerClass } from '../utils/utils'
+import { getDoctors, getSectionTitle } from '@/lib/sanity-queries'
 
 export const Doctors = async ({ limit = 4, withButton = true }: { limit?: number; withButton?: boolean }) => {
-	const doctors = await client.fetch<Doctor[]>(`*[_type == "doctor"][0...${limit}]`)
-	const sectionTitle = await client.fetch<SectionTitles>(
-		`*[_type == "sectionTitles" && slug.current == "poznaj-naszych-specjalistow"][0]`
-	)
+	const [doctors, sectionTitle] = await Promise.all([getDoctors(limit), getSectionTitle('poznaj-naszych-specjalistow')])
+
 	return (
 		<div className={getContainerClass('centered')}>
 			<Title

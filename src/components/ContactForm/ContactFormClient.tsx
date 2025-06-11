@@ -2,22 +2,22 @@
 
 import { useForm } from 'react-hook-form'
 import { Button } from '../common/Button'
-import { useCallback, useMemo } from 'react'
-import { Doctor } from '@/types/sanity'
+import { useCallback } from 'react'
+//import { Doctor } from '@/types/sanity'
 
 interface FormData {
 	name: string
 	email: string
-	doctor: string
+	// doctor: string
 	subject: string
 }
 
 interface ContactFormClientProps {
-	doctors: Doctor[]
+	// doctors: Doctor[]
 	mailTo: string
 }
 
-export const ContactFormClient = ({ doctors, mailTo }: ContactFormClientProps) => {
+export const ContactFormClient = ({ /* doctors, */ mailTo }: ContactFormClientProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -25,19 +25,18 @@ export const ContactFormClient = ({ doctors, mailTo }: ContactFormClientProps) =
 		formState: { errors }
 	} = useForm<FormData>()
 
-	const DOCTORS_OPTIONS = useMemo(() => {
-		return doctors.map((doctor) => ({
-			value: doctor._id,
-			label: doctor.name
-		}))
-	}, [doctors])
+	// const DOCTORS_OPTIONS = useMemo(() => {
+	// 	return doctors.map((doctor) => ({
+	// 		value: doctor._id,
+	// 		label: doctor.name
+	// 	}))
+	// }, [doctors])
 
 	const onSubmit = useCallback(
 		(data: FormData) => {
 			// we need to prepare a message that will be sent via default email client
 			const message = `Imię i nazwisko: ${data.name}
 Adres e-mail: ${data.email}
-Wybierz lekarza: ${data.doctor}
 Temat wiadomości: ${data.subject}`
 
 			window.location.href = `mailto:${mailTo}?subject=Wiadomość z formularza kontaktowego&body=${encodeURIComponent(message)}`
@@ -76,6 +75,7 @@ Temat wiadomości: ${data.subject}`
 				</div>
 			</div>
 
+			{/* Doctor selection temporarily disabled
 			<div className='mb-4'>
 				<select
 					className='w-full py-2 border-b-[1px] border-light-pink border-0 focus:outline-none focus:ring-2 focus:ring-blue-500'
@@ -95,6 +95,7 @@ Temat wiadomości: ${data.subject}`
 				</select>
 				{errors.doctor && <p className='text-red-500 text-sm mt-1'>{errors.doctor.message}</p>}
 			</div>
+			*/}
 
 			<div className='mb-4'>
 				<textarea
