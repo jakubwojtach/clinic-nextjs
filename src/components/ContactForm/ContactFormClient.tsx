@@ -3,6 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { Button } from '../common/Button'
 import { useCallback } from 'react'
+import { ContactForm } from '@/types/sanity'
 //import { Doctor } from '@/types/sanity'
 
 interface FormData {
@@ -15,9 +16,10 @@ interface FormData {
 interface ContactFormClientProps {
 	// doctors: Doctor[]
 	mailTo: string
+	form: ContactForm['form']
 }
 
-export const ContactFormClient = ({ /* doctors, */ mailTo }: ContactFormClientProps) => {
+export const ContactFormClient = ({ /* doctors, */ mailTo, form }: ContactFormClientProps) => {
 	const {
 		register,
 		handleSubmit,
@@ -52,7 +54,7 @@ Temat wiadomości: ${data.subject}`
 				<div className='flex-1'>
 					<input
 						type='text'
-						placeholder='Imię i nazwisko'
+						placeholder={form.name}
 						className='w-full py-2 border-b-[1px] border-light-pink border-0  focus:outline-none focus:ring-2 focus:ring-blue-500'
 						{...register('name', { required: 'To pole jest wymagane' })}
 					/>
@@ -61,7 +63,7 @@ Temat wiadomości: ${data.subject}`
 				<div className='flex-1'>
 					<input
 						type='email'
-						placeholder='Adres e-mail'
+						placeholder={form.email}
 						className='w-full  py-2 border-b-[1px] border-light-pink border-0  focus:outline-none focus:ring-2 focus:ring-blue-500'
 						{...register('email', {
 							required: 'To pole jest wymagane',
@@ -85,7 +87,7 @@ Temat wiadomości: ${data.subject}`
 					{...register('doctor', { required: 'To pole jest wymagane' })}
 				>
 					<option value='' disabled>
-						Wybierz lekarza
+						{form.prefferedDoctor}
 					</option>
 					{DOCTORS_OPTIONS.map((doctor) => (
 						<option key={doctor.value} value={doctor.value}>
@@ -99,7 +101,7 @@ Temat wiadomości: ${data.subject}`
 
 			<div className='mb-4'>
 				<textarea
-					placeholder='Temat wiadomości'
+					placeholder={form.message}
 					className='resize-none w-full  py-2 border-b-[1px] border-light-pink border-0  focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[150px]'
 					{...register('subject', { required: 'To pole jest wymagane' })}
 				/>
@@ -107,7 +109,7 @@ Temat wiadomości: ${data.subject}`
 			</div>
 
 			<Button type='submit' variant='lightPink' className='w-full mt-8'>
-				Wyślij
+				{form.submitButtonText}
 			</Button>
 		</form>
 	)

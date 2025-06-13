@@ -16,6 +16,8 @@ import { achievements } from './homepage/achievements'
 import { aboutHeader } from './about/header'
 import { contactHeader } from './contact/contactHeader'
 import companyDetails from './companyDetails'
+import { contactForm } from './contact/contactForm'
+import { contactSections } from './contact/contactSections'
 
 export const schema: { types: SchemaTypeDefinition[] } = {
 	types: [
@@ -35,6 +37,8 @@ export const schema: { types: SchemaTypeDefinition[] } = {
 		footer,
 		aboutHeader,
 		contactHeader,
-		companyDetails
+		companyDetails,
+		contactForm,
+		contactSections
 	]
 }

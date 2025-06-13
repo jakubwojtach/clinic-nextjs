@@ -14,7 +14,9 @@ import type {
 	SeparatorWithButton,
 	BlogPost,
 	AccordionHomepage,
-	Achievements
+	Achievements,
+	ContactForm,
+	ContactSections
 } from '@/types/sanity'
 
 // Common section titles fetch
@@ -35,6 +37,24 @@ export const getCompanyDetails = unstable_cache(
 		return await client.fetch<CompanyDetails>(`*[_type == "companyDetails"] | order(_updatedAt desc)[0]`)
 	},
 	['company-details'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Contact form fetch
+export const getContactForm = unstable_cache(
+	async () => {
+		return await client.fetch<ContactForm>(`*[_type == "contactForm"] | order(_updatedAt desc)[0]`)
+	},
+	['contact-form'],
+	{ revalidate: REVALIDATE_TIME }
+)
+
+// Contact sections fetch
+export const getContactSections = unstable_cache(
+	async () => {
+		return await client.fetch<ContactSections>(`*[_type == "contactSections"] | order(_updatedAt desc)[0]`)
+	},
+	['contact-sections'],
 	{ revalidate: REVALIDATE_TIME }
 )
 

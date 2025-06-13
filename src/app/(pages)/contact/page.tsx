@@ -4,10 +4,15 @@ import { ContactForm } from '@/components/ContactForm/ContactForm'
 import { Header } from '@/components/Header'
 import classNames from 'classnames'
 import { urlFor } from '@/sanity/lib/image'
-import { getFAQ, getCompanyDetails, getContactHeader } from '@/lib/sanity-queries'
+import { getFAQ, getCompanyDetails, getContactHeader, getContactSections } from '@/lib/sanity-queries'
 
 export default async function ContactPage() {
-	const [faq, contactHeader, companyDetails] = await Promise.all([getFAQ(), getContactHeader(), getCompanyDetails()])
+	const [faq, contactHeader, companyDetails, contactSections] = await Promise.all([
+		getFAQ(),
+		getContactHeader(),
+		getCompanyDetails(),
+		getContactSections()
+	])
 
 	const preparedFAQItems = faq.map((item) => ({
 		title: item.question,
@@ -50,8 +55,8 @@ export default async function ContactPage() {
 				<div className='flex flex-col gap-4 bg-dark-gray text-white py-8 sm:py-16 xl:pr-0 pr-16'>
 					<div className='xl:w-[540px] w-full xl:ml-auto xl:mr-[60px] mx-6 flex flex-col gap-8'>
 						<div className='gap-2'>
-							<h3 className='text-title font-bold'>Napisz do nas</h3>
-							<p>Skorzystaj z formularza poniżej, aby skontaktować się z nami.</p>
+							<h3 className='text-title font-bold'>{contactSections.leftSectionTitle}</h3>
+							<p>{contactSections.leftSectionDescription}</p>
 						</div>
 						<ContactForm />
 					</div>
@@ -59,8 +64,8 @@ export default async function ContactPage() {
 				<div className='flex flex-col gap-4 bg-pink text-dark-gray py-8 sm:py-16 xl:pr-0 pr-16'>
 					<div className='xl:w-[540px] w-full lg:mr-auto xl:ml-[60px] mx-6 gap-8 flex flex-col'>
 						<div className='flex flex-col gap-2'>
-							<h3 className='text-title font-bold'>FAQ</h3>
-							<p>Odpowiedzi na najczęstsze pytania</p>
+							<h3 className='text-title font-bold'>{contactSections.rightSectionTitle}</h3>
+							<p>{contactSections.rightSectionDescription}</p>
 						</div>
 						<Accordion items={preparedFAQItems} />
 					</div>

@@ -130,3 +130,20 @@ export interface Achievements extends SanityDocument {
 	title: string
 	icon: (typeof ICON_VALUES)[number]
 }
+
+export interface ContactForm extends SanityDocument {
+	form: {
+		name: string
+		email: string
+		message: string
+		prefferedDoctor: string
+		submitButtonText: string
+	}
+}
+
+export interface ContactSections extends SanityDocument {
+	leftSectionTitle: string
+	leftSectionDescription: string
+	rightSectionTitle: string
+	rightSectionDescription: string
+}

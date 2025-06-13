@@ -1,7 +1,9 @@
 import { ContactFormClient } from './ContactFormClient'
-import { getCompanyDetails } from '@/lib/sanity-queries'
+import { getCompanyDetails, getContactForm } from '@/lib/sanity-queries'
 
 export const ContactForm = async () => {
 	const companyDetails = await getCompanyDetails()
-	return <ContactFormClient mailTo={companyDetails.email} />
+	const contactForm = await getContactForm()
+
+	return <ContactFormClient mailTo={companyDetails.email} form={contactForm.form} />
 }

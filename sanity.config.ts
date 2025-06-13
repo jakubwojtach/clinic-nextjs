@@ -10,6 +10,7 @@ import { CogIcon, DocumentIcon, ImagesIcon } from '@sanity/icons'
 import { dataset, projectId } from './src/sanity/env'
 import { schema } from './src/sanity/schemaTypes'
 import { plPLLocale } from '@sanity/locale-pl-pl'
+import { IconPhone } from '@tabler/icons-react'
 
 // Go to https://www.sanity.io/docs/api-versioning to learn how API versioning works
 
@@ -25,6 +26,12 @@ const createDocumentList = (S: StructureBuilder, title: string, type: string) =>
 
 // Structure configuration
 const structure = (S: StructureBuilder) => {
+	const contactFormItem = createSingleton(S, 'Formularz kontaktowy', 'contactForm', 'contactForm')
+	const contactSectionsItem = createSingleton(S, 'Sekcje kontaktu', 'contactSections', 'contactSections')
+
+	// Contact sections section
+	const contactSectionsItems = [contactSectionsItem, contactFormItem]
+
 	// Settings section
 	const settingsItems = [
 		createSingleton(S, 'Dane firmy', 'companyDetails', 'companyDetails'),
@@ -54,7 +61,9 @@ const structure = (S: StructureBuilder) => {
 		'homepageHeader',
 		'images',
 		'tags',
-		'socialMedia'
+		'socialMedia',
+		'contactForm',
+		'contactSections'
 	]
 
 	return S.list()
@@ -62,6 +71,10 @@ const structure = (S: StructureBuilder) => {
 		.items([
 			// Settings section
 			S.listItem().title('Ustawienia').icon(CogIcon).child(S.list().title('Ustawienia').items(settingsItems)),
+			S.listItem()
+				.title('Kontakt - formularz i sekcje')
+				.icon(IconPhone)
+				.child(S.list().title('Kontakt - formularz i sekcje').items(contactSectionsItems)),
 
 			// Headers section
 			S.listItem().title('Nagłówki').icon(DocumentIcon).child(S.list().title('Nagłówki').items(headerItems)),
